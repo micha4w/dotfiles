@@ -18,6 +18,7 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 function fish_user_key_bindings
     bind -M insert \cf forward-char
+    bind -M insert \e\x7F backward-kill-word
 end
 
 fish_vi_key_bindings
