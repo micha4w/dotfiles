@@ -1,8 +1,9 @@
 if status is-interactive
-    if not set -q TMUX
+    if not set -q TMUX && [ "$TERM_PROGRAM" != "vscode" ]
         exec tmux
     end
 
+    fish_add_path -m /usr/local/go/bin/
     fish_add_path -m ~/.local/bin/
     fish_add_path -m ~/.cargo/bin/
     fish_add_path -m ~/.local/kitty.app/bin/
@@ -24,5 +25,4 @@ end
 fish_vi_key_bindings
 
 function fish_greeting
-    # neofetch
 end
