@@ -17,6 +17,9 @@ dotfiles remote add origin git@github.com:micha4w/dotfiles.git
 dotfiles pull --set-upstream origin main
 dotfiles submodule init
 dotfiles submodule update
+
+# Set your shell
+chsh -s /usr/bin/fish
 ```
 
 If you now restart your Terminal, you should be spawned in a tmux session running fish! Do Shift-F1 + I do install tmux plugins
