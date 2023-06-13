@@ -24,3 +24,7 @@ chsh -s /usr/bin/fish
 
 If you now restart your Terminal, you should be spawned in a tmux session running fish! Do Shift-F1 + I do install tmux plugins
 For max customization, run fish_conifig and remap Shift-Space to Shift-F1 in your Terminal Emulator.
+
+## Other important Stuff
+- [Fisher](https://github.com/jorgebucaran/fisher)
+- [nvm.fish](https://github.com/jorgebucaran/nvm.fish)
