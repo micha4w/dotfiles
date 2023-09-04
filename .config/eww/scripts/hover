@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+hovering=$1
+monitor=$2
+for var in "${@:3}"
+do
+  eww update "$var=$(eww get $var | jq -c ".[$monitor]=$hovering")"
+done

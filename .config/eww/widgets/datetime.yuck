@@ -1,0 +1,45 @@
+(defpoll date-seconds :interval '1s' 'date +%S')
+(defpoll date-minutes :interval '1s' 'date +%M')
+(defpoll date-hours :interval '1s' 'date +%H')
+(defpoll date-day :interval '10s' 'date +%d')
+(defpoll date-month :interval '10s' 'date +%b')
+(defpoll date-year :interval '10s' 'date +%y')
+(defvar date-show '[false, false, false, false]')
+
+(defwidget datetime [monitor]
+  (eventbox
+    :onhover 'scripts/hover true ${monitor} date-show'
+    :onhoverlost 'scripts/hover false ${monitor} date-show'
+
+    (box
+      :orientation 'v' 
+      :space-evenly false
+      :class 'widget time'
+
+      ;; Have to be seperate because centering
+      date-hours
+      date-minutes
+      date-seconds
+      
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal {date-show[monitor]}
+
+        (box
+          :orientation 'v'
+          :space-evenly false
+          
+          (label
+            :class "separator"
+            :angle 90
+            :text "|"
+          )
+          date-day
+          date-month
+          date-year
+        )
+      )
+    )
+  )
+)

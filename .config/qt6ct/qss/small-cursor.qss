@@ -1,0 +1,3 @@
+QCursor {
+	background-color: red;
+}

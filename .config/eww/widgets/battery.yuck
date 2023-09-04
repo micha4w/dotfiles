@@ -1,0 +1,80 @@
+(defvar battery-show '[false, false, false, false]')
+(defwidget battery [monitor]
+  (eventbox
+    :onhover 'scripts/hover true ${monitor} battery-show'
+    ;; :onscroll 'if [ "{}" == "up" ]; then brightnessctl -q -d intel_backlight s +5%; else brightnessctl -q -d intel_backlight s 5%-; fi'
+    ;; :onclick 'if [ $(eww windows | grep -x "*brightness-popup") ]; then eww close brightness-popup; else eww open brightness-popup; fi'
+	  (box
+	    :class 'widget battery'
+	    :orientation 'v'
+	    :space-evenly false
+
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal {battery-show[monitor]}
+
+        (box
+          :class 'power-buttons'
+          :orientation 'v'
+          :spacing 10
+
+	        (eventbox
+	          :cursor 'hand2'
+	          :class 'power-button logout'
+				    :onclick 'killall Hyprland'
+				    ''
+				  )
+	        (eventbox
+	          :cursor 'hand2'
+	          :class 'power-button suspend'
+				    :onclick 'systemctl suspend-then-hibernate -i'
+				    ''
+				  )
+	        (eventbox
+	          :cursor 'hand2'
+	          :class 'power-button hibernate'
+				    :onclick 'systemctl hibernate -i'
+				    ''
+				  )
+  	      (eventbox
+  	        :cursor 'hand2'
+  	        :class 'power-button reboot'
+				    :onclick 'reboot'
+				    ''
+				  )
+	        (eventbox
+	          :cursor 'hand2'
+	          :class 'power-button shutdown'
+				    :onclick 'shutdown now'
+            ''
+		      )
+		    )
+      )
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal {!battery-show[monitor]}
+
+        (box
+	        :orientation 'v'
+	        :space-evenly false
+
+          (label
+              :class 'battery-icon'
+              :text '${EWW_BATTERY.BAT0.capacity}'
+          )
+	        (transform
+	          :rotate 25
+	          ;; :scale-x '140%'
+	          ;; :scale-y '120%'
+	          :translate-y '-25px'
+	          :translate-x '-5px'
+	          :translate-y '-30px'
+	          (image :path '${ICONS_PATH}/panel/battery-${EWW_BATTERY.BAT0.capacity >= 95 ? '100' : '0${round(EWW_BATTERY.BAT0.capacity/10, 0)*10}'}${EWW_BATTERY.BAT0.status == 'Charging' ? '-charging' : ''}.svg')
+	        )
+	      )
+	    )
+    )
+  )
+)

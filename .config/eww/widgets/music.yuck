@@ -1,0 +1,72 @@
+(deflisten music-data 
+  :initial ''
+  `playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}", "cover-art": "{{mpris:artUrl}}"}'`
+)
+(defwidget music [monitor]
+	(revealer
+	  :transition 'slideup'				
+		:reveal { music-data == '' ? false : music-data.status != 'Stopped' }
+    (box
+      :class 'widget music' 
+      :orientation 'v'
+      :space-evenly false
+			:style 'font-size: 1.2rem; background-image: url("${music-data != '' ? music-data.cover-art : ''}"); ${ music-data == '' ? '' : music-data.cover-art == '' ? '' : 'padding: 12px 0px' }'
+
+      (eventbox
+        :onclick 'playerctl play-pause'
+        :cursor 'hand2'
+        :style 'font-size: 1.2rem'
+
+        (label
+          :class 'play-button'
+			    :style { music-data == '' ? '' : music-data.cover-art == '' ? '' : 'padding: 4px 0px' }
+          :text {music-data == '' ? '▶' : music-data.status == 'Playing' ? '⏸' : '▶'}
+        )
+      )
+	    (revealer
+	      :transition 'slideup'				
+		    :reveal { music-data == '' ? true : music-data.cover-art == '' }
+        (eventbox
+          ;; :onclick 'if [ $(eww windows | grep -x "*music-popup") ]; then eww close music-popup; else eww open music-popup; fi'
+          :cursor 'hand2'
+          (label
+            :xalign 0.45
+            :text { music-data == '' ? '' : music-data.cover-art == '' ? '' : ''}
+          )
+        )
+		  )
+    )
+  )
+)
+
+(defwidget music-popup []
+  (box
+    :class 'popup'
+    :orientation 'h' 
+    :valign 'fill'
+    :space-evenly false 
+    :spacing 10
+
+    (button
+      :class 'field'
+      :onclick 'playerctl previous'
+      '⏮'
+    )
+    '${music-data.artist} - ${music-data.title}'
+    (button
+      :class 'field'
+      :onclick 'playerctl next'
+      '⏭'
+    )
+  )
+)
+
+(defwindow music-popup
+  :monitor 0
+  ;; :focusable true
+  :geometry (geometry
+    :y '150px'
+    :anchor 'bottom left'
+  )
+  (music-popup)
+)

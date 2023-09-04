@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo $(iwctl station wlan0 show | grep 'Connected network') | cut -d' ' -f 3

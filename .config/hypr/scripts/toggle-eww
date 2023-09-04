@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+window=$(eww windows | grep -e "^*\?$1\$")
+if [[ "$window" == "*$1" ]]
+then
+  eww close "$1"
+else
+  eww open "$1"
+fi

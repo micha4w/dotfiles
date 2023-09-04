@@ -1,0 +1,49 @@
+(defvar volume-show '[false, false, false, false]')
+(deflisten volume-current :initial '{ "mute": false, "volume": { "front-left": { "value_percent": "0%" } }, "properties": {} }' './scripts/audio volume')
+(defwidget volume [monitor]
+  (eventbox
+    :onhover 'scripts/hover true ${monitor} volume-show'
+    :onhoverlost 'scripts/hover false ${monitor} volume-show'
+    :onscroll 'if [ "{}" == "up" ]; then pamixer -i 5; else pamixer -d 5; fi'
+    ;; :onclick 'pavucontrol &'
+    (box
+      :class 'widget volume'
+      :orientation 'v'
+			:space-evenly false
+
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal { volume-show[monitor] }
+
+        (scale
+          :class 'volume-bar'
+			    :value { replace(volume-current.volume.front-left.value_percent, '%', '') }
+			    :orientation 'v'
+			    :flipped true
+			    :max 100
+			    :min 0
+          :onchange 'pamixer --set-volume $(v={} ; (( v = (v+2)/5, v *= 5)); echo $v | sed "s/\\..*//g")'
+			  )
+      )
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal { !volume-show[monitor] }
+        (label
+			    :text { replace(volume-current.volume.front-left.value_percent, '%', '') }
+        )
+      )
+      (eventbox
+        :onclick 'pamixer --toggle-mute'
+        :cursor 'hand2'
+        (label
+          :style 'margin-top: 3px; font-size: 1.2rem'
+          :xalign { volume-current.mute ? 0.45 : 0.5 }
+          :text { volume-current.mute ? '' : ( volume-current.properties['device.form_factor'] == 'headphone' ? '' : '' )  }
+        )
+      )
+    )
+  )
+)
+

@@ -1,0 +1,138 @@
+(defwindow overview0
+  :stacking "overlay"
+  :focusable true
+  :monitor 0
+  :geometry (geometry
+    :anchor "center center"
+  )
+  (overview
+    :monitor 0
+    :scale 0.14
+    :bar-width 66
+    :screen-width { 1920 / 1.18 }
+    :screen-height { 1080 / 1.18 }
+    :offset-x 1920
+    :offset-y 0
+    :border 1
+  )
+)
+
+(defwindow overview1
+  :stacking "overlay"
+  :focusable true
+  :monitor 1
+  :geometry (geometry
+    :anchor "center center"
+  )
+  (overview
+    :monitor 1
+    :scale 0.1
+    :bar-width 72
+    :screen-width 1920
+    :screen-height 1080
+    :offset-x 0
+    :offset-y 0
+    :border 2
+  )
+)
+
+(deflisten overview-workspaces :initial '[]' 'scripts/overview')
+(defwidget overview [monitor scale bar-width screen-width screen-height offset-x offset-y border]
+  (box
+    :orientation "v"
+    :space-evenly false
+
+    (eventbox
+      :class 'overview'
+      :onclick '/usr/bin/eww close overview${ monitor }'
+      (overlay
+        (box
+          :space-evenly false
+          :orientation 'v'
+          (box
+            :orientation 'h'
+            :style 'margin: 0;'
+            (for id in '[0,1,2,3,4]'
+              (workspacebox
+                :monitor monitor
+                :scale scale
+                :bar-width bar-width
+                :screen-width screen-width
+                :screen-height screen-height
+                :offset-x offset-x
+                :offset-y offset-y
+                :border border
+                :workspace {overview-workspaces[id + monitor * 10]}
+              )
+            )
+          )
+          (box
+            :style 'margin: 0;'
+            :orientation 'h'
+            (for id in '[5,6,7,8,9]'
+              (workspacebox
+                :monitor monitor
+                :scale scale
+                :bar-width bar-width
+                :screen-width screen-width
+                :screen-height screen-height
+                :offset-x offset-x
+                :offset-y offset-y
+                :border border
+                :workspace {overview-workspaces[id + monitor * 10]}
+              )
+            )
+          )
+        )
+      )
+    )
+
+    (input
+      :style 'opacity: 0'
+      :onchange 'scripts/overview-key ${ monitor } {}'
+      :onaccept 'eww open --toggle overview${ monitor }'
+    )
+  )
+)
+
+(defwidget workspacebox [monitor scale bar-width screen-width screen-height offset-x offset-y border workspace]
+  (eventbox
+    :onclick { workspace.windows == [] ? 'hyprctl dispatch workspace ${ workspace.id }' : '' }
+    (box
+      :space-evenly false
+      :class 'overview-workspace ${workspace.active ? 'active' : ''}'
+      :style '
+        min-width: ${(screen-width - bar-width) * scale}px;
+        min-height: ${screen-height * scale}px;
+      '
+      (for window in {workspace.windows}
+        (box
+          :class 'overview-window ${window.address == workspace.lastwindow ? 'active' : ''}'
+          :style '
+            margin-left: ${ window.fullscreen ? 0 : (window.at[0] - offset-x - bar-width) * scale + border }px;
+            margin-top: ${ window.fullscreen ? 0 : (window.at[1] - offset-y) * scale + border }px;
+            margin-right: -${ window.fullscreen ? (screen-width - bar-width) * scale : (window.at[0] - offset-x - bar-width + window.size[0]) * scale - border }px;
+            margin-bottom: ${ window.fullscreen ? 0 : screen-height * scale - ((window.at[1] - offset-y + window.size[1]) * scale - border) }px;
+          '
+          (eventbox
+            ;; :onhover 'eww update overview_hovered_windows=$(($(eww get overview_hovered_windows) + 1))'
+            ;; :onhoverlost 'eww update overview_hovered_windows=$(($(eww get overview_hovered_windows) - 1))'
+            :onmiddleclick 'hyprctl dispatch closewindow address:${window.address}'
+            :onclick 'hyprctl dispatch focuswindow address:${window.address}'
+            (box
+              :class 'overview-background'
+
+              (image
+                :class 'overview-icon'
+                :path { window.icon }
+
+                :image-width { round(window.size[0] * scale * 45 / 100, 0) }
+                :image-height { round(window.size[1] * scale * 45 / 100, 0) }
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

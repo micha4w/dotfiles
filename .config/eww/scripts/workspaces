@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+spaces (){
+	monitors="$(hyprctl monitors -j | jq -Mc "map({key: .name, value: {id: .id, active: .activeWorkspace.id}}) | from_entries")"
+	hyprctl workspaces -j | jq -Mc --argjson monitors "$monitors" 'map({key: .id | tostring, value: { windows: .windows, monitor: $monitors[.monitor].id, active: ($monitors[.monitor].active == .id) }}) | from_entries'
+}
+
+spaces
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -r line; do
+	spaces
+done

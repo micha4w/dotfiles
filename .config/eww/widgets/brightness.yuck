@@ -1,0 +1,47 @@
+(defvar brightness-show '[false, false, false, false]')
+(deflisten brightness-current :initial '[-1, -1, -1, -1]' './scripts/brightness intel_backlight')
+(defwidget brightness [monitor]
+  (eventbox
+    :onhover 'scripts/hover true ${monitor} brightness-show'
+    :onscroll 'if [ "{}" == "up" ]; then brightnessctl -q -d intel_backlight s +5%; else brightnessctl -q -d intel_backlight s 5%-; fi'
+    :onclick 'eww open brightness'
+    (box
+      :class 'widget brightness'
+      :orientation 'v'
+			:space-evenly false
+
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal {brightness-show[monitor]}
+
+        (scale
+          :class 'brightness-bar'
+          :value {brightness-current[monitor]}
+			    :orientation 'v'
+			    :flipped true
+			    :max 100
+			    :min 0
+			    :onchange { monitor == 0 ? 'brightnessctl -q set {}%' : 'scripts/brightness-set ${ monitor } {} "${ brightness-current }" &' }
+			  )
+      )
+      (revealer
+	      :transition 'slidedown'
+	      :duration '550ms'
+        :reveal {!brightness-show[monitor]}
+
+        (box
+          :orientation 'v'
+          :space-evenly false
+          (label
+            :text {brightness-current[monitor]}
+          )
+          (label
+            :style 'margin-top: 3px;'
+            :text ''
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+monitor=$1
+key=${2: -1}
+workspace=$(( $(hyprctl activeworkspace -j | jq '.id') - 1 ))
+
+case $key in
+  l) hyprctl dispatch workspace $(( ($workspace + 1) % 5 + $workspace / 5 * 5 + 1)) ;;
+  h) hyprctl dispatch workspace $(( ($workspace + 4) % 5 + $workspace / 5 * 5 + 1)) ;;
+  k|j) hyprctl dispatch workspace $(( ($workspace + 5) % 10 + 1 + 10 * $monitor )) ;;
+  # L) hyprctl dispatch movefocus r; hyprctl dispatch workspace +0;;
+  q) eww close overview$monitor ;;
+esac
+

@@ -1,0 +1,25 @@
+#/usr/bin/env bash
+
+below_15=false
+below_5=false
+upower --monitor | grep --line-buffered 'BAT0' | while read -r line
+do
+  read state percentage < <(upower -d | jc --upower | jq -r '.[] | select(.native_path == "BAT0") | "\(.detail.state) \(.detail.percentage)"')
+
+  if [ $state == charging ]
+  then
+    below_5=false
+    below_15=false
+  elif [ $below_5 == false ] && [ $percentage -le 5 ]
+  then
+    below_5=true
+    below_15=true
+    notify-send -u critical 'Battery extremely low'
+		brightnessctl -q -d intel_backlight set 5%
+  elif [ $below_15 == false ] && [ $percentage -le 15 ]
+  then
+    below_15=true
+    notify-send 'Battery low'
+		brightnessctl -q -d intel_backlight set 15%
+  fi
+done

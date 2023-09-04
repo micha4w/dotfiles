@@ -1,0 +1,24 @@
+(deflisten workspaces-current :initial '{}' './scripts/workspaces')
+(defwidget workspaces [monitor]
+  (eventbox 
+    ;; :onscroll './scripts/change-active-workspace {} ${current_workspace}' :class 'workspaces-widget'
+            ;; :cursor 'hand2'
+    (box
+      :orientation 'v'
+      :class 'widget workspaces'
+      ;; :space-evenly false
+      (for id in '[1,2,3,4,5,6,7,8,9,10]'
+        (eventbox
+          :onclick 'hyprctl dispatch workspace ${ id + monitor * 10 }'
+          (box
+            (label
+              :text '${ workspaces-current[id + monitor * 10] != 'null' ? workspaces-current[id + monitor * 10].active ? '❖' : '◆' :'◇' }'
+              ;; :text '${ workspaces[id + monitor * 10] ? workspace.active && workspace.monitor == monitor ? '❖' : (workspace.active || workspace.windows > 0 ? '◆' : '◇') }'
+              ;; :style '${ (workspace.monitor >= 0 && workspace.monitor != monitor) ? 'color: gray' : ''}; ${workspace.active && workspace.monitor == monitor ? 'font-size: 12px' : '' }'
+            )
+          )
+        )
+      )
+    )
+  )
+)

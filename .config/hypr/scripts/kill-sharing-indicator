@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -r line; do
+  if [[ ${line:0:10} == 'openwindow' ]]
+  then
+    IFS=','
+    read -ra values <<< "$line"
+    IFS=' '
+
+    if [[ ${values[2]} == 'firefox' ]] && [[ ${values[3]} == 'Firefox — Sharing Indicator' ]]
+    then
+      hyprctl dispatch closewindow 'title:^(Firefox — Sharing Indicator)$'
+    fi
+  fi
+done

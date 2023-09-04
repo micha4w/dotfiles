@@ -1,0 +1,33 @@
+(defwindow brightness
+  :stacking "overlay"
+  :focusable true
+  :monitor 1
+  :geometry (geometry
+    :anchor "left center"
+  )
+  (brightness-window
+    :monitor 1
+  )
+)
+
+
+(deflisten overview-workspaces :initial '[]' 'scripts/get-windows')
+(defwidget brightness-window [monitor]
+  (eventbox
+    :class 'brightness-window'
+    :onhoverlost 'eww close brightness'
+    ;; :onclick '/usr/bin/eww close overview${ monitor }'
+
+    (for led in '["intel_backlight", "intel_backlight"]'
+     (scale
+        :class 'brightness-bar'
+			  :value brightness-current
+			  :orientation 'v'
+			  :flipped true
+			  :max 100
+			  :min 0
+			  :onchange 'brightnessctl -q -d ${led} set {}%'
+			)
+    )
+  )
+)

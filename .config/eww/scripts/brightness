@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "[$(brightnessctl -m -d $1 | cut -d, -f 4 | tr -d '%'), $(scripts/.venv/bin/python -c "import monitorcontrol; l=[[monitor.__enter__(),monitor.get_luminance(),monitor.__exit__(None, None, None)][1] for monitor in monitorcontrol.get_monitors()[1:]]; print(*l, *([0] * (3-len(l))), sep=',')")]"
+
+while RES=$(inotifywait -q /sys/class/backlight/$1/actual_brightness)
+do 
+  eww get brightness-current | jq -Mc ".[0] = $(brightnessctl -m -d $1 | cut -d, -f 4 | tr -d '%')"
+  # brightnessctl -m -d $1 | cut -d, -f 4 | tr -d '%'
+done

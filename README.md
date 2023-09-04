@@ -28,3 +28,10 @@ For max customization, run fish_conifig and remap Shift-Space to Shift-F1 in you
 ## Other important Stuff
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [nvm.fish](https://github.com/jorgebucaran/nvm.fish)
+
+### Firefox
+Firefox has some terrible default settings?
+
+in about:preferences enable `Allow pages to choose their own fonts`
+in about:config enable `media.ffmpeg.vaapi.enabled`
+

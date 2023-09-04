@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+windows () {
+  windows=$(hyprctl clients -j | jq 'map(select(.title != ""))')
+  icons='{'
+  while read class
+  do
+    icon=$(geticons -s 128 "$class" | head -n1)
+    if [[ "x$icon" == "x" ]]
+    then
+      IFS=' '
+      names=($class)
+      icon="$(geticons -s 128 "${names[0],,}" | head -n1)"
+
+      if [[ "x$icon" == "x" ]]
+      then
+        IFS='-'
+        names=($class)
+        icon="$(geticons -s 128 "${names[0],,}" | head -n1)"
+      fi
+      IFS='>>'
+    fi
+    icons="$icons\"$class\":\"$icon\","
+  done < <(echo "$windows" | jq -r '.[] | .class' | sort | uniq)
+  icons="${icons:0:-1}}"
+
+	monitors=$(hyprctl monitors -j | jq -Mc \
+	  'map({key: .name, value: {id: .id, active: .activeWorkspace.id}}) | from_entries')
+	workspaces=$(hyprctl workspaces -j | jq -Mc --argjson monitors "$monitors" \
+	  'map({key: .id | tostring, value: { windows: .windows, monitor: $monitors[.monitor].id, active: ($monitors[.monitor].active == .id), lastwindow: .lastwindow }}) | from_entries')
+	
+  seq 1 $(( 10 * $(hyprctl monitors -j | jq 'length') )) | jq -Mc --argjson windows "$windows" --argjson workspaces "$workspaces" --argjson icons "$icons" --slurp \
+    'map(. as $id | {id: $id, windows: $windows | map(select(.workspace.id == $id) | .icon = $icons[.class]), monitor: $workspaces[$id | tostring].monitor, active: ($workspaces[$id | tostring].active//false), lastwindow: $workspaces[$id | tostring].lastwindow })'
+}
+
+IFS='>>'
+windows
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -ra line
+do
+  case $line in
+    activewindow|openwindow|movewindow|closewindow)
+	    windows
+  esac
+done
+

@@ -1,0 +1,94 @@
+(defvar ICONS_PATH '/usr/share/icons/Papirus/24x24/')
+(include './windows/overview.yuck')
+
+(defwindow bar0
+  :monitor 0
+  :stacking 'bg'
+  :windowtype 'dock'
+  :exclusive 'true'
+  :geometry (geometry
+    :x 0
+    :y 0
+    :width '40px'
+    :height '100%'
+    :anchor 'left center'
+  )
+  (bar :monitor 0)
+)
+
+(defwindow bar1
+  :monitor 1
+  :stacking 'bg'
+  :windowtype 'dock'
+  :exclusive 'true'
+  :geometry (geometry
+    :x 0
+    :y 0
+    :width '40px'
+    :height '100%'
+    :anchor 'left center'
+  )
+  (bar :monitor 1)
+)
+
+(defwidget bar [monitor]
+  (centerbox
+    :orientation 'v'
+    :class 'eww-bar'
+
+    (top :monitor monitor)
+    (middle :monitor monitor)
+    (bottom :monitor monitor)
+  )
+)
+
+(include './widgets/workspaces.yuck')
+(defwidget top [monitor]
+  (box
+    :valign 'start'
+    (workspaces :monitor monitor)
+  )
+)
+
+
+(include './widgets/datetime.yuck')
+(defwidget middle [monitor]
+  (box
+    :orientation 'v'
+    (datetime :monitor monitor)
+  )
+)
+
+
+(include './widgets/music.yuck')
+(include './widgets/brightness.yuck')
+(include './widgets/volume.yuck')
+(include './widgets/battery.yuck')
+(include './widgets/wifi.yuck')
+(defwidget bottom [monitor]
+  (box
+    :valign 'end'
+    :orientation 'v'
+    :space-evenly false
+
+    (music :monitor monitor)
+    (eventbox
+      :onhoverlost 'scripts/hover false ${monitor} battery-show wifi-show brightness-show volume-show'
+  	  (box :orientation 'v' :space-evenly false
+        (eventbox :onhoverlost 'scripts/hover false ${monitor} wifi-show brightness-show volume-show'
+  	      (box :orientation 'v' :space-evenly false
+            (eventbox :onhoverlost 'scripts/hover false ${monitor} brightness-show volume-show'
+  	          (box :orientation 'v' :space-evenly false
+                (volume :monitor monitor)
+                (brightness :monitor monitor)
+              )
+            )
+            (wifi :monitor monitor)
+          )
+        )
+        (battery :monitor monitor)
+      )
+    )
+  )
+)
+

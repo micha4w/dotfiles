@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+pactl --format json list sinks | jq -Mc ".[] | select(.name == \"$(pactl get-default-sink)\")"
+pactl subscribe \
+  | grep --line-buffered "Event 'change' on sink " \
+  | while read -r evt; 
+do
+  pactl --format json list sinks | jq -Mc ".[] | select(.name == \"$(pactl get-default-sink)\")"
+done

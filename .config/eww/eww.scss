@@ -1,0 +1,165 @@
+// Mocca Catppuccin theme
+$rosewater: #F5E0DC;
+$flamingo: 	#F2CDCD;
+$pink: 	    #F5C2E7;
+$mauve: 	  #CBA6F7;
+$red: 	    #F38BA8;
+$maroon: 	  #EBA0AC;
+$peach: 	  #FAB387;
+$yellow: 	  #F9E2AF;
+$green: 	  #A6E3A1;
+$teal: 	    #94E2D5;
+$sky: 	    #89DCEB;
+$sapphire: 	#74C7EC;
+$blue: 	    #89B4FA;
+$lavender: 	#B4BEFE;
+$text: 	    #CDD6F4;
+$subtext1: 	#BAC2DE;
+$subtext0: 	#A6ADC8;
+$overlay2: 	#9399B2;
+$overlay1: 	#7F849C;
+$overlay0: 	#6C7086;
+$surface2: 	#585B70;
+$surface1: 	#45475A;
+$surface0: 	#313244;
+$base: 	    #1E1E2E;
+$mantle: 	  #181825;
+$crust: 	  #11111B;
+
+* {
+  all: unset;
+}
+
+
+.popup, .eww-bar, .overview {
+  // font-family: "CaskaydiaCove Nerd Font Mono", "Font Awesome 6 Free";
+  font-family: "Font Awesome 6 Free";
+  color: $text;
+  margin: 10px;
+  margin-right: 0px;
+  border-radius: 10px;
+  min-width: 40px;
+  padding: 3px;
+  background-color: rgba($mantle, 0.8)
+}
+
+.overview {
+  background-color: rgba($mantle, 0.9);
+}
+
+.overview-window {
+  border-radius: 5px;
+  background-color: rgba($crust, 0.75);
+  border: 2px $surface0 solid;
+
+  &.active {
+    border: 2px $surface2 solid;
+  }
+}
+
+.widget, .overview-workspace {
+  border-radius: 5px;
+  // border: 1px solid $base;
+  background-color: rgba($crust, 0.9);
+}
+
+.overview-workspace {
+  margin: 4px;
+  padding: 2px;
+  // box-sizing: border-box;
+  border: 2px transparent solid;
+
+  &.active {
+    border: 2px $overlay2 solid;
+
+    .overview-window.active {
+      border: 2px $peach solid;
+    }
+  }
+}
+
+.widget {
+  padding: 7px 5px;
+  margin-top: 4px;
+
+  &.music {
+    background-size: cover;
+    background-position: center; 
+    // padding: 2px 0px;
+    // border: 5px solid $crust;
+  }
+}
+
+.play-button {
+  background-color: rgba($crust, 0.75);
+  margin: 0px 10px;
+  border-radius: 8px;
+}
+
+tooltip.background {
+  background-color: $base;
+  border-radius: 5px;
+}
+
+tooltip label {
+  margin: 6px;
+}
+
+.time {
+  padding: 10px 5px;
+}
+
+.separator {
+  color: $overlay0;
+  font-size: 20px;
+  margin: 10px 0px;
+}
+
+scale trough {
+  background-color: #22242b;
+  // box-shadow: 0 2px 3px 2px #06060b;
+  border-radius: 16px;
+  min-height: 70px;
+  min-width: 15px;
+  margin: 10px;
+}
+
+.brightness-bar trough highlight {
+  // background-image: linear-gradient(to right, #afcee0 30%, #a1bdce 50%, #77a5bf 100% *50);
+  background-color: $teal;
+  border-radius: 10px;
+}
+
+.volume-bar trough highlight {
+  // background-image: linear-gradient(to right, #afcee0 30%, #a1bdce 50%, #77a5bf 100% *50);
+  background-color: $mauve;
+  border-radius: 10px;
+}
+
+.power-buttons {
+  margin: 8px;
+}
+.power-button {
+  font-size: 1.4rem;
+
+  &.shutdown {
+    color: $red;
+  }
+  &.reboot {
+    color: $peach;
+  }
+  &.hibernate {
+    color: $yellow;
+  }
+  &.suspend {
+    font-size: 1.6rem;
+    color: $teal;
+  }
+  &.logout {
+    color: $green;
+  }
+}
+
+.field {
+  background-color: $crust;
+}

@@ -1,0 +1,63 @@
+(defpoll wifi-current :interval '2s' './scripts/wifi')
+(defvar wifi-show '[false, false, false, false]')
+(deflisten vpn-status 'systemctl --user is-active netextender.service || true')
+(defwidget wifi [monitor]
+  (eventbox
+    :onhover 'scripts/hover true ${monitor} wifi-show'
+    (revealer
+	    :transition 'slidedown'
+	    :duration '550ms'
+      :reveal {wifi-current != ''}
+
+      (box
+        :class 'widget wifi'
+        :orientation 'v'
+		    :space-evenly false
+
+        (revealer
+	        :transition 'slidedown'
+	        :duration '550ms'
+          :reveal {wifi-show[monitor]}
+
+          (box
+            :orientation 'v'
+		        :space-evenly false
+            :style 'margin: 5px'
+
+            (label
+              :angle 90
+              :style 'margin-bottom: 8px'
+              :text wifi-current
+            )
+
+            (eventbox
+              :onclick 'systemctl --no-block --user ${ vpn-status == 'active' ? 'stop' : 'start' } netextender'
+              :onmiddleclick 'systemctl --no-block --user restart netextender'
+              :cursor 'pointer'
+
+              { vpn-status == 'active' ? '' : vpn-status == 'inactive' ? '' : vpn-status == 'activating' || vpn-status == 'deactivating' ? '' : '' }
+            )
+
+          )
+        )
+
+        (revealer
+	        :transition 'slidedown'
+	        :duration '550ms'
+          :reveal {!wifi-show[monitor]}
+          
+          (overlay
+            (label
+              :style 'margin: 5px;'
+              :text ''
+            )
+            (label
+              :style 'margin: 14px 0 0 14px; font-size: 10px'
+              :text { vpn-status == 'active' ? '' : vpn-status == 'inactive' ? '' : vpn-status == 'activating' || vpn-status == 'deactivating' ? '' : '' }
+            )
+          )
+        )
+      )
+    )
+  )
+)

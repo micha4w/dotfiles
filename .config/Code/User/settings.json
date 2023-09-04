@@ -1,0 +1,52 @@
+{
+    "vim.vimrc.enable": true,
+    "keyboard.dispatch": "keyCode",
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.enabled": false,
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "editor.lineNumbers": "relative",
+    "redhat.telemetry.enabled": false,
+    "glassit.alpha": 235,
+    "window.menuBarVisibility": "toggle",
+    "ansible.validation.lint.enabled": false,
+    "application.shellEnvironmentResolutionTimeout": 120,
+    "explorer.confirmDelete": false,
+    "debug.onTaskErrors": "abort",
+    "editor.minimap.size": "fill",
+    "C_Cpp.formatting": "vcFormat",
+    "explorer.confirmDragAndDrop": false,
+    "cmake.configureOnOpen": false,
+    "svelte.enable-ts-plugin": true,
+    "terminal.integrated.env.linux": {},
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
+    "editor.largeFileOptimizations": false,
+    "editor.selectionClipboard": false,
+    "vim.useSystemClipboard": true,
+    "git.confirmSync": false,
+    "console-ninja.showWhatsNew": false,
+    "vim.leader": "<space>",
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["<leader>", "f"],
+            "commands": ["editor.fold"],
+        },
+        {
+            "before": ["<leader>", "F"],
+            "commands": ["editor.unfold"],
+        },
+        {
+            "before": ["<leader>", "/"],
+            "commands": ["editor.action.commentLine"],
+        },
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["<leader>", "/"],
+            "commands": ["editor.action.commentLine"],
+        },
+    ],
+    "editor.inlayHints.enabled": "offUnlessPressed"
+}
