@@ -7,7 +7,6 @@
     "editor.lineNumbers": "relative",
     "redhat.telemetry.enabled": false,
     "glassit.alpha": 235,
-    "window.menuBarVisibility": "toggle",
     "ansible.validation.lint.enabled": false,
     "application.shellEnvironmentResolutionTimeout": 120,
     "explorer.confirmDelete": false,
@@ -21,7 +20,6 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
     },
-    "python.formatting.provider": "none",
     "editor.largeFileOptimizations": false,
     "editor.selectionClipboard": false,
     "vim.useSystemClipboard": true,
@@ -48,5 +46,49 @@
             "commands": ["editor.action.commentLine"],
         },
     ],
-    "editor.inlayHints.enabled": "offUnlessPressed"
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "autopep8.args": [
+        "--max-line-length=200"
+    ],
+    "git.openRepositoryInParentFolders": "always",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "vim.handleKeys": {
+        "<C-p>": false,
+        "<C-d>": true,
+        "<C-s>": false,
+        "<C-z>": false
+    },
+    "window.zoomLevel": 1,
+    "C_Cpp.vcFormat.indent.lambdaBracesWhenParameter": false,
+    "vim.highlightedyank.enable": true,
+    "vim.highlightedyank.color": "rgba(186, 194, 222, 0.3)",
+    "vim.highlightedyank.duration": 175,
+    "window.menuBarVisibility": "hidden",
+    "MATLAB.installPath": "/home/micha4w/.local/share/matlab/R2023b",
+    "MATLAB.telemetry": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "git.suggestSmartCommit": false,
+    "cmake.showOptionsMovedNotification": false,
+    "editor.stickyScroll.enabled": true,
+    "cSpell.language": "en,de",
+    "cSpell.useGitignore": false,
+    "cSpell.userWords": [
+        "Ausschliessung",
+        "clangd",
+        "tempdir",
+        "tempfile",
+        "Timotheus",
+        "tokio"
+    ],
+    "[css]": {
+        "editor.defaultFormatter": "Wscats.eno"
+    }
 }

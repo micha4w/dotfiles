@@ -1,0 +1,158 @@
+// Mocca Catppuccin theme
+$rosewater: #F5E0DC;
+$flamingo: 	#F2CDCD;
+$pink: 	    #F5C2E7;
+$mauve: 	  #CBA6F7;
+$red: 	    #F38BA8;
+$maroon: 	  #EBA0AC;
+$peach: 	  #FAB387;
+$yellow: 	  #F9E2AF;
+$green: 	  #A6E3A1;
+$teal: 	    #94E2D5;
+$sky: 	    #89DCEB;
+$sapphire: 	#74C7EC;
+$blue: 	    #89B4FA;
+$lavender: 	#B4BEFE;
+$text: 	    #CDD6F4;
+$subtext1: 	#BAC2DE;
+$subtext0: 	#A6ADC8;
+$overlay2: 	#9399B2;
+$overlay1: 	#7F849C;
+$overlay0: 	#6C7086;
+$surface2: 	#585B70;
+$surface1: 	#45475A;
+$surface0: 	#313244;
+$base: 	    #1E1E2E;
+$mantle: 	  #181825;
+$crust: 	  #11111B;
+
+@use 'sass:color';
+
+* {
+  all: unset;
+}
+
+.window {
+  // font-family: "CaskaydiaCove Nerd Font Mono";
+  font-family: "Font Awesome 6 Free";
+  color: $text;
+  border-radius: 10px;
+  margin: 10px;
+
+  &.bar {
+    background-color: rgba($base, 0.8);
+    min-width: 40px;
+    padding: 3px;
+    margin-right: 0px;
+  }
+
+  &.settings {
+    background-color: rgba($base, 0.98);
+    padding: 4px;
+  }
+}
+
+.widget{
+  border-radius: 5px;
+  // border: 1px solid $surface1;
+  background-color: rgba($crust, 0.9);
+  padding: 7px 5px;
+  margin-top: 4px;
+
+  &.music {
+    min-height: 35px;
+    background-size: cover;
+    background-position: center; 
+  }
+
+  &.workspaces {
+    padding: 3px;
+
+    & .play-button {
+      background-color: rgba($crust, 0.75);
+      margin: 5px;
+      padding: 5px;
+      border-radius: 8px;
+    }
+  }
+
+  .workspace {
+    background-color: $surface2;
+    min-width: 14px;
+    min-height: 14px;
+    border-radius: 3px;
+    margin: 3px;
+
+    &.urgent {
+      background-color: $red;
+    }
+
+    &.active {
+      background-color: $lavender;
+    }
+
+    &.empty {
+      background-color: $surface0;
+    }
+  }
+
+  &.time {
+    padding: 10px 5px;
+  }
+}
+
+tooltip.background {
+  background-color: $base;
+  border-radius: 5px;
+  border: 2px solid $lavender;
+}
+
+tooltip label {
+  margin: 3px;
+}
+
+// .sliders-box {
+//     // @include widget;
+//     // @include spacing($rec: true);
+//     // @include spacing(0);
+//     // padding: $padding;
+// 
+//     button {
+//         // @include button($flat: true);
+//         // padding: $padding / 2;
+//     }
+// 
+//     scale {
+//         // @include slider;
+//         // margin-left: $spacing * -0.5;
+//     }
+// 
+//     .menu {
+//         // margin: $spacing 0;
+//         background-color: red;
+//         border: white solid 1px;
+//         // border-radius: $radii;
+//     }
+// }
+
+scale trough {
+  background-color: #22242b;
+  // box-shadow: 0 2px 3px 2px #06060b;
+  border-radius: 10px;
+  min-height: 17px;
+  min-width: 70px;
+  margin: 7px 5px;
+  transition: all 1s ease-out;
+
+  & highlight {
+    border-radius: 10px;
+  }
+
+}
+
+.volume highlight {
+  background-image: linear-gradient(to top, $mauve 10%, color.scale($mauve, $lightness: 10%, $saturation: -75%));
+}
+.brightness highlight {
+  background-image: linear-gradient(to top, $teal 10%, color.scale($teal, $lightness: 30%, $saturation: -100%));
+}

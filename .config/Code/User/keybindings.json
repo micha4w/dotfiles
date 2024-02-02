@@ -1,14 +1,5 @@
 [
-    {
-        "key": "ctrl+enter",
-        "command": "workbench.action.terminal.toggleTerminal",
-        "when": "terminal.active"
-    },
-    {
-        "key": "ctrl+`",
-        "command": "-workbench.action.terminal.toggleTerminal",
-        "when": "terminal.active"
-    },
+    // Ctrl + {J, K} for Selecting stuff
     {
         "key": "ctrl+h",
         "command": "workbench.action.navigateLeft"
@@ -46,6 +37,28 @@
         "when": "inQuickOpen"
     },
     {
+        "key": "ctrl+j",
+        "command": "selectNextCodeAction",
+        "when": "codeActionMenuVisible"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "showNextParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !codeActionMenuVisible && !suggestWidgetVisible"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "showPrevParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !codeActionMenuVisible && !suggestWidgetVisible"
+    },
+
+    // Make stuff work with vim
+    {
         "key": "tab",
         "command": "tab",
         "when": "editorTextFocus && !editorTabMovesFocus"
@@ -55,6 +68,27 @@
         "command": "outdent",
         "when": "editorTextFocus && !editorTabMovesFocus"
     },
+    
+    // Select other Terminal [TODO editor groups]
+    {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.focusNextPane",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "ctrl+shift+n",
+        "command": "workbench.action.terminal.focusPreviousPane",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+
+    {
+        "key": "ctrl+enter",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+    },
+    
+
+    // Because don't fit Swiss Keyboard Layout
     {
         "key": "ctrl+=",
         "command": "-workbench.action.zoomIn"
@@ -66,5 +100,10 @@
     {
         "key": "ctrl+-",
         "command": "-workbench.action.zoomOut"
-    }
+    },
+    {
+        "key": "ctrl+`",
+        "command": "-workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+    },
 ]
