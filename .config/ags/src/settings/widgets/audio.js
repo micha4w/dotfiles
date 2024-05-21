@@ -10,6 +10,10 @@ export default (monitor) => {
         vertical: true,
 
         children: [
+            Widget.Revealer({
+                reveal_child: revealed.bind(),
+                child: Widget.Label('very nice'),
+            }),
             Widget.Box({
                 children: [
                     Widget.Slider({
@@ -48,10 +52,6 @@ export default (monitor) => {
                     })
                 ],
             }),
-            Widget.Revealer({
-                reveal_child: revealed.bind(),
-                child: Widget.Label('very nice'),
-            })
         ],
     });
 };

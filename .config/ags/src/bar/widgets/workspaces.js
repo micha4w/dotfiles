@@ -1,8 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+import Gtk from "gi://Gtk?version=3.0";
 
-/** @type {import('gtk-3.0').Gtk} */
-const Gtk = imports.gi.Gtk;
 
 function getClasses(workspace, activeWorkspaceID) {
     const classes = ['workspace'];
@@ -31,7 +30,7 @@ export default (monitor) => {
                     const id = monitor * 10 + i++;
                     return Widget.Button({
                         class_names: getClasses(Hyprland.getWorkspace(id), activeWorkspace),
-                        on_clicked: () => Hyprland.sendMessage(`dispatch workspace ${id + monitor * 10}`),
+                        on_clicked: () => Hyprland.sendMessage(`dispatch workspace ${id}`),
                     })
                 })
             });

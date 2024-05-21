@@ -3,7 +3,7 @@ import Audio from './widgets/audio.js';
 import Brightness from './widgets/brightness.js'
 
 
-/** @type {import('gtk-3.0').Gtk} */
+/** @type {import('@girs/gtk-3.0').Gtk} */
 const Gtk = imports.gi.Gtk;
 
 /** @param {number} monitor */
@@ -13,7 +13,6 @@ export const Settings = (monitor) => Widget.Window({
     // name: `settings${monitor}`,
     anchor: ['left', 'bottom'],
     keymode: 'on-demand',
-    popup: true,
 
     child: Widget.Box({
         class_names: ['window', 'settings'],
@@ -32,13 +31,13 @@ export const Settings = (monitor) => Widget.Window({
                 children: [
                     Audio(monitor),
                     Brightness(monitor),
+                    // children: drop down if monitor connected ddcutil
                 ],
             }),
             Widget.Label({
                 label: 'battery, logout options',
                 class_name: 'widget',
-                // children: drop down if monitor connected ddcutil
             }),
         ]
     })
-});
+}).keybind('Escape', () => App.closeWindow('settings'));

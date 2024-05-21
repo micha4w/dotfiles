@@ -1,7 +1,7 @@
-import { Widget } from "resource:///com/github/Aylur/ags/widget.js"
+import Widget from "resource:///com/github/Aylur/ags/widget.js"
 import Mpris, { MprisPlayer } from 'resource:///com/github/Aylur/ags/service/mpris.js';
 
-/** @type {import('gtk-3.0').Gtk} */
+/** @type {import('@girs/gtk-3.0').Gtk} */
 const Gtk = imports.gi.Gtk;
 
 /** @param {number} monitor */
@@ -42,8 +42,10 @@ export default (monitor) => {
             self.reveal_child = false
             // self.child.visible = false
         } else {
-            if (_playerctld !== playerctld)
+            if (_playerctld !== playerctld) {
+                // @ts-ignore
                 self.child = Player(playerctld)
+            }
             self.child.visible = true
             self.reveal_child = true
         }

@@ -1,25 +1,38 @@
+import Service from 'resource:///com/github/Aylur/ags/service.js';
 import { registerGObject } from 'resource:///com/github/Aylur/ags/utils/gobject.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
-
-/** @type {import('@girs/gio-2.0').Gio} */
-const Gio = imports.gi.Gio;
-
-/** @type {import('@girs/gobject-2.0').GObject} */
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio?version=2.0'
+import GObject from 'gi://GObject?version=2.0'
 
 let time = 0;
 
-/** @param { (...args: any[]) => typeof GObject.Object } service */
-/** @param { { [signal: string]: import('types/utils/gobject').PspecFlag; } } signals */
-/** @param { { [prop: string]: [type?: import('types/utils/gobject').PspecType, handle?: import('types/utils/gobject').PspecFlag] } } properties */
-export function customRegister(service, signals, properties) {
-    registerGObject(service, {
+export class CustomService extends Service {
+    /**
+     * @param { new (...args: any[]) => GObject.Object } service
+     * @param { { [signal: string]: import('types/utils/gobject').PspecType[]; } } signals
+     * @param { { [prop: string]: [type?: import('types/utils/gobject').PspecType, handle?: import('types/utils/gobject').PspecFlag] } } properties
+     * @override
+     */
+    static register(service, signals, properties) {
+        registerGObject(service, {
             signals,
             properties,
             typename: `${service.name}_${time}`,
         });
+    }
 }
+
+// /** @param { (...args: any[]) => typeof GObject.Object } service */
+// /** @param { { [signal: string]: import('types/utils/gobject').PspecFlag; } } signals */
+// /** @param { { [prop: string]: [type?: import('types/utils/gobject').PspecType, handle?: import('types/utils/gobject').PspecFlag] } } properties */
+// export function customRegister(service, signals, properties) {
+//     registerGObject(service, {
+//             signals,
+//             properties,
+//             typename: `${service.name}_${time}`,
+//         });
+// }
 
 /** @param {string[]} directories */
 /** @param {(root: string) => Promise<void>} onReload */
@@ -38,7 +51,7 @@ export function watchDirs(directories, onReload) {
         }
     }
  
-    async function listenRecursively(path) {
+    function listenRecursively(path) {
         Gio.FILE_ATTRIBUTE_STANDARD_NAME
         const file = Gio.File.new_for_path(path)
         const enumerator = file.enumerate_children(
@@ -63,11 +76,14 @@ export function watchDirs(directories, onReload) {
                         listenRecursively(file.get_path());
                 }
             },
-            'directory',
         )
 
     }
 
     listenRecursively(`${App.configDir}/src`);
     onChange();
+
+    App.config({
+        windows: []
+    })
 }

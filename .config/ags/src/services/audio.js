@@ -1,12 +1,12 @@
-import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import { bulkConnect, bulkDisconnect } from 'resource:///com/github/Aylur/ags/utils.js';
-import { customRegister } from 'file:///home/micha4w/.config/ags/auto_reload.js'
+// import Service from 'resource:///com/github/Aylur/ags/service.js';
+import { CustomService as Service } from 'file:///home/micha4w/.config/ags/auto_reload.js'
 
 
 
-/** @type {import('gvc-1.0').Gvc} */
+/** @type {import('@girs/gvc-1.0').Gvc} */
 const Gvc = imports.gi.Gvc;
 
 const _MIXER_CONTROL_STATE = {
@@ -18,7 +18,7 @@ const _MIXER_CONTROL_STATE = {
 
 export class Stream extends Service {
     static {
-        customRegister(this, {
+        Service.register(this, {
             'closed': [],
         }, {
             'application-id': ['string'],
@@ -32,12 +32,12 @@ export class Stream extends Service {
         });
     }
 
-    /** @type { import('gvc-1.0').Gvc.MixerStream } */
+    /** @type { import('@girs/gvc-1.0').Gvc.MixerStream } */
     #stream;
     /** @type { number[] } */
     #ids;
 
-    /** @param { import('gvc-1.0').Gvc.MixerStream } stream */
+    /** @param { import('@girs/gvc-1.0').Gvc.MixerStream } stream */
     constructor(stream) {
         super();
 
@@ -76,9 +76,6 @@ export class Stream extends Service {
     }
 
     set volume(value) {
-        if (value > (App.config.maxStreamVolume))
-            value = (App.config.maxStreamVolume);
-
         if (value < 0)
             value = 0;
 
@@ -96,9 +93,9 @@ export class Stream extends Service {
         else
             icon = 'volume-' + (/** @type {string[]} */ ([
                 [1.01, 'overamplified'],
-                [.67, 'high'],
-                [.34, 'medium'],
-                [0, 'low'],
+                [.75, 'high'],
+                [.40, 'medium'],
+                [.10, 'low'],
                 /** @ts-ignore */
             ].find(([threshold]) => threshold <= this.volume)))[1];
 
@@ -113,7 +110,7 @@ export class Stream extends Service {
 
 export class Audio extends Service {
     static {
-        customRegister(this, {
+        Service.register(this, {
             'speaker-changed': [],
             'microphone-changed': [],
             'stream-added': ['int'],
@@ -128,7 +125,7 @@ export class Audio extends Service {
         });
     }
 
-    /** @type { import('gvc-1.0').Gvc.MixerControl } */
+    /** @type { import('@girs/gvc-1.0').Gvc.MixerControl } */
     #control;
     /** @type { Map<number, Stream> } */
     #streams;
@@ -174,9 +171,13 @@ export class Audio extends Service {
         this.#control.set_default_source(stream.stream);
     }
 
+    /** @ts-ignore */
     get microphones() { return this.#getStreams(Gvc.MixerSource); }
+    /** @ts-ignore */
     get speakers() { return this.#getStreams(Gvc.MixerSink); }
+    /** @ts-ignore */
     get apps() { return this.#getStreams(Gvc.MixerSinkInput); }
+    /** @ts-ignore */
     get recorders() { return this.#getStreams(Gvc.MixerSourceOutput); }
 
     /** @param {number} id */
@@ -200,7 +201,7 @@ export class Audio extends Service {
         this.emit(`${type}-changed`);
     }
 
-    /** @param { import('gvc-1.0').Gvc.MixerControl } _c */
+    /** @param { import('@girs/gvc-1.0').Gvc.MixerControl } _c */
     /** @param {number} id */
     #streamAdded(_c, id) {
         if (this.#streams.has(id))
@@ -218,14 +219,15 @@ export class Audio extends Service {
         this.emit('changed');
     }
 
-    /** @param { import('gvc-1.0').Gvc.MixerControl } _c */
+    /** @param { import('@girs/gvc-1.0').Gvc.MixerControl } _c */
     /** @param {number} id */
     #streamRemoved(_c, id) {
         const stream = this.#streams.get(id);
         if (!stream)
             return;
 
-        stream.disconnect(this.#streamBindings.get(id));
+        const binding = this.#streamBindings.get(id);
+        if (binding) stream.disconnect(binding);
         stream.close();
 
         this.#streams.delete(id);
@@ -236,7 +238,7 @@ export class Audio extends Service {
         this.emit('changed');
     }
 
-    /** @param { { new(): import('gvc-1.0').Gvc.MixerControl } } filter */
+    /** @param { { new(): import('@girs/gvc-1.0').Gvc.MixerControl } } filter */
     #getStreams(filter) {
         const list = [];
         for (const [, stream] of this.#streams) {

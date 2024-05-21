@@ -1,10 +1,10 @@
-import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-import { customRegister } from 'file:///home/micha4w/.config/ags/auto_reload.js'
+// import Service from 'resource:///com/github/Aylur/ags/service.js';
+import { CustomService as Service } from 'file:///home/micha4w/.config/ags/auto_reload.js'
 
 class BrightnessService extends Service {
     static {
-        customRegister(
+        Service.register(
             this,
             { },
             { 'screen-value': ['float', 'rw'], },

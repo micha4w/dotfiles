@@ -4,12 +4,9 @@ import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Audio from '../../services/audio.js';
 import { Settings } from '../../settings/settings.js';
-import { Widget } from 'resource:///com/github/Aylur/ags/widget.js';
-
-/** @type {import('gtk-3.0').Gtk} */
-const Gtk = imports.gi.Gtk;
-/** @type {import('gdkpixbuf-2.0').GdkPixbuf} */
-const GdkPixbuf = imports.gi.GdkPixbuf;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import Gtk from "gi://Gtk?version=3.0";
+import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
 
 
 /** @param {number} monitor */
@@ -38,7 +35,7 @@ export default (monitor) => {
                         if (!Audio.speaker) return;
 
                         self.icon = Audio.speaker.get_icon();
-                        self.tooltipText = `${Math.round(Audio.speaker.volume*100)}%`;
+                        self.tooltip_text = `${Math.round(Audio.speaker.volume*100)}%`;
                     });
 
                 }, 'speaker-changed'),
