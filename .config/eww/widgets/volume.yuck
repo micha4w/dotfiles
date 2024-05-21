@@ -1,5 +1,5 @@
 (defvar volume-show '[false, false, false, false]')
-(deflisten volume-current :initial '{ "mute": false, "volume": { "front-left": { "value_percent": "0%" } }, "properties": {} }' './scripts/audio volume')
+(deflisten volume-current :initial '{ "mute": false, "volume": { "mono": { "value_percent": "0%" }, "front-left": { "value_percent": "0%" } }, "properties": {} }' './scripts/audio volume')
 (defwidget volume [monitor]
   (eventbox
     :onhover 'scripts/hover true ${monitor} volume-show'
@@ -18,7 +18,7 @@
 
         (scale
           :class 'volume-bar'
-			    :value { replace(volume-current.volume.front-left.value_percent, '%', '') }
+			    :value { replace((volume-current.volume.mono != 'null' ? volume-current.volume.mono : volume-current.volume.front-left).value_percent, '%', '') }
 			    :orientation 'v'
 			    :flipped true
 			    :max 100
@@ -31,7 +31,7 @@
 	      :duration '550ms'
         :reveal { !volume-show[monitor] }
         (label
-			    :text { replace(volume-current.volume.front-left.value_percent, '%', '') }
+			    :text { replace((volume-current.volume.mono != 'null' ? volume-current.volume.mono : volume-current.volume.front-left).value_percent, '%', '') }
         )
       )
       (eventbox
@@ -40,7 +40,7 @@
         (label
           :style 'margin-top: 3px; font-size: 1.2rem'
           :xalign { volume-current.mute ? 0.45 : 0.5 }
-          :text { volume-current.mute ? '' : ( volume-current.properties['device.form_factor'] == 'headphone' ? '' : '' )  }
+          :text { volume-current.mute ? '' : ( volume-current.properties['device.form_factor'] == 'headphone' || volume-current.properties['device.form_factor'] == 'headset' ? '' : '' )  }
         )
       )
     )

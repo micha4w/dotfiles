@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-echo $(iwctl station wlan0 show | grep 'Connected network') | cut -d' ' -f 3
+nmcli -g general.connection device show wlan0

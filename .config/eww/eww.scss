@@ -32,7 +32,7 @@ $crust: 	  #11111B;
 
 
 .popup, .eww-bar, .overview {
-  // font-family: "CaskaydiaCove Nerd Font Mono", "Font Awesome 6 Free";
+  // font-family: "CaskaydiaCove Nerd Font Mono";
   font-family: "Font Awesome 6 Free";
   color: $text;
   margin: 10px;
@@ -40,11 +40,11 @@ $crust: 	  #11111B;
   border-radius: 10px;
   min-width: 40px;
   padding: 3px;
-  background-color: rgba($mantle, 0.8)
+  background-color: rgba($base, 0.8)
 }
 
 .overview {
-  background-color: rgba($mantle, 0.9);
+  background-color: rgba($base, 0.9);
 }
 
 .overview-window {
@@ -59,7 +59,7 @@ $crust: 	  #11111B;
 
 .widget, .overview-workspace {
   border-radius: 5px;
-  // border: 1px solid $base;
+  // border: 1px solid $surface1;
   background-color: rgba($crust, 0.9);
 }
 

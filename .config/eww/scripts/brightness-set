@@ -4,5 +4,7 @@ monitor=$1
 brightness=$2
 current=$3
 
-scripts/.venv/bin/monitorcontrol --monitor $(( $monitor + 1 )) --set-luminance $brightness
 eww update brightness-current=$(echo $current | jq -Mc ".[$monitor] = $brightness")
+# ddcutil --sleep-multiplier .1 --display $monitor setvcp 10 $brightness
+scripts/.venv/bin/monitorcontrol --monitor $(( $monitor + 1 )) --set-luminance $brightness
+

@@ -4,7 +4,7 @@
 )
 (defwidget music [monitor]
 	(revealer
-	  :transition 'slideup'				
+	  :transition 'slideup'
 		:reveal { music-data == '' ? false : music-data.status != 'Stopped' }
     (box
       :class 'widget music' 
