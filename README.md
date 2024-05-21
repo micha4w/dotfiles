@@ -2,6 +2,12 @@
 Dotfiles first edition
 
 ## Installing
+
+### Nixos
+There is a nixos flake in [.config/nixos](.config/nixos).
+
+
+### Manual
 You need to install fish, nvim and tmux yourself
 
 ```sh
