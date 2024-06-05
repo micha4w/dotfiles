@@ -34,28 +34,26 @@ export class CustomService extends Service {
 //         });
 // }
 
-/** @param {string[]} directories */
-/** @param {(root: string) => Promise<void>} onReload */
+/**
+ * @param {string[]} directories
+ * @param {() => Promise<void>} onReload
+ */
 export function watchDirs(directories, onReload) {
     async function onChange() {
+        console.log('changed')
         try {
             time++;
-            const root = '/tmp/ags/js' + time;
-            await Utils.execAsync(`rm -rf /tmp/ags/js*`);
-            await Utils.execAsync(`mkdir -p ${root}`);
-            await Utils.execAsync(`cp -R ${App.configDir}/src ${root}`);
-
-            await onReload(`${root}/src`);
-        } catch (/** @type {any} */ e) {
+            await onReload();
+        } catch (e) {
             console.error(e);
         }
     }
- 
+
     function listenRecursively(path) {
         Gio.FILE_ATTRIBUTE_STANDARD_NAME
         const file = Gio.File.new_for_path(path)
         const enumerator = file.enumerate_children(
-            Gio.FILE_ATTRIBUTE_STANDARD_NAME+','+Gio.FILE_ATTRIBUTE_STANDARD_TYPE,
+            Gio.FILE_ATTRIBUTE_STANDARD_NAME + ',' + Gio.FILE_ATTRIBUTE_STANDARD_TYPE,
             Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
             null
         );
@@ -80,7 +78,7 @@ export function watchDirs(directories, onReload) {
 
     }
 
-    listenRecursively(`${App.configDir}/src`);
+    directories.forEach(dir => listenRecursively(`${App.configDir}/${dir}`));
     onChange();
 
     App.config({

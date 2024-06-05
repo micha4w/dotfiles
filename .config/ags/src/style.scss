@@ -66,10 +66,6 @@ $crust: 	  #11111B;
     min-height: 35px;
     background-size: cover;
     background-position: center; 
-  }
-
-  &.workspaces {
-    padding: 3px;
 
     & .play-button {
       background-color: rgba($crust, 0.75);
@@ -77,6 +73,10 @@ $crust: 	  #11111B;
       padding: 5px;
       border-radius: 8px;
     }
+  }
+
+  &.workspaces {
+    padding: 3px;
   }
 
   .workspace {
