@@ -30,11 +30,13 @@ $crust: 	  #11111B;
 
 * {
   all: unset;
+  font-family: "CaskaydiaCove Nerd Font Mono";
+  // font-family: "Noto Emoji";
+  // font-family: "Tahoma";
 }
 
 .window {
   //font-family: "CaskaydiaCove Nerd Font Mono";
-  font-family: Tahoma;
   // line-height: 0px;
   // font-family: "Font Awesome 6 Free";
   font-weight: 900;
@@ -69,9 +71,10 @@ $crust: 	  #11111B;
 
     & .play-button {
       background-color: rgba($crust, 0.75);
-      margin: 5px;
+      margin: 6px;
       padding: 5px;
       border-radius: 8px;
+      // min-height: 18px;
     }
   }
 

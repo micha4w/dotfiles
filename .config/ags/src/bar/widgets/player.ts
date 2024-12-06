@@ -13,12 +13,11 @@ export default (monitor: number) => {
             orientation: Gtk.Orientation.VERTICAL,
             vpack: 'center',
             children: [
-                Widget.Label({
+                Widget.Icon({
                     // css: 'font-size: 1.2rem',
                     class_names: ['play-button'],
-                    label: player.bind('play_back_status').transform(
-                        /** @returns {string} */
-                        status => status === 'Playing' ? '⏸' : '▶'
+                    icon: player.bind('play_back_status').transform(
+                        (status: string) => status === 'Playing' ? 'media-pause' : 'media-play'
                     ),
                 })
             ],

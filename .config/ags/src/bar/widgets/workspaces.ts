@@ -6,10 +6,10 @@ import Gtk from "gi://Gtk?version=3.0";
 
 function getClasses(workspace? : Workspace, activeWorkspaceID? : number) {
     const classes = ['workspace'];
-    if (workspace === undefined)
-        classes.push('empty')
-    else if (workspace.id === activeWorkspaceID)
+    if (workspace?.id === activeWorkspaceID)
         classes.push('active')
+    else if (workspace === undefined || workspace.windows === 0)
+        classes.push('empty')
 
     return classes;
 }

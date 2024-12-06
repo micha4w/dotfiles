@@ -36,14 +36,13 @@ export class CustomService extends Service {
 
 /**
  * @param {string[]} directories
- * @param {() => Promise<void>} onReload
+ * @param {(root: string) => Promise<void>} onReload
  */
 export function watchDirs(directories, onReload) {
     async function onChange() {
-        console.log('changed')
         try {
             time++;
-            await onReload();
+            await onReload('/tmp/ags/js' + time);
         } catch (e) {
             console.error(e);
         }

@@ -1,6 +1,7 @@
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import { Bar } from './bar/bar';
 import { Settings } from './settings/settings';
+import * as Notifications from './notifications/notifications';
 // const notifications = (await import(`file://${root}/notifications/notifications.js`))
 // const keys = (await import(`file://${root}/keys/keys.js`))
 
@@ -23,3 +24,5 @@ Hyprland.connect("monitor-added", (self, name) => {
 if (settings_was_open) {
     App.addWindow(Settings(0));
 }
+
+// App.addWindow(Notifications.NotificationPopup(0));

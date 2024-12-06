@@ -1,6 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
+import { get_audio_icon } from 'src/utils';
 
 
 export default (monitor: number) => {
@@ -21,25 +22,22 @@ export default (monitor: number) => {
                         draw_value: false,
                         min: 0,
                         max: 100,
-                        value: Audio.speaker?.bind('volume'),
+                        value: Audio.speaker.bind('volume'),
                         step: 1,
 
                         on_change: ({ value }) => { if (Audio.speaker) Audio.speaker.volume = value / 100 },
                     }).hook(Audio, self => {
-                        if (!Audio.speaker) return;
-
                         self.bind('value', Audio.speaker, 'volume', (vol) => vol * 100)
                     }, 'speaker-changed'),
                     Widget.Button({
-                        on_clicked: () => { if (Audio.speaker) Audio.speaker.is_muted = !Audio.speaker.is_muted },
+                        on_clicked: () => { Audio.speaker.is_muted = !Audio.speaker.is_muted },
                         child: Widget.Icon({
                             size: 20,
                             css: 'margin: 0 5px'
                         }).hook(Audio, self => {
-                            if (!Audio.speaker) return;
-
                             self.hook(Audio.speaker, (self) => {
-                                if (Audio.speaker) self.icon = Audio.speaker.icon_name ?? 'volume-muted';
+                                if (!Audio.speaker.stream) return;
+                                self.icon = get_audio_icon(Audio.speaker);
                             });
                         }, 'speaker-changed'),
                     }),

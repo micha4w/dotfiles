@@ -1,8 +1,9 @@
-import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 import { dump } from "../utils.js";
 import type { Notification } from 'types/service/notifications.js';
+import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
+import Network from '../services/network';
 
-const NotificationIcon = ({ app_entry, app_icon, image } : Notification) => {
+const NotificationIcon = ({ app_entry, app_icon, image }: Notification) => {
     if (image) {
         return Widget.Box({
             css: `
@@ -24,7 +25,7 @@ const NotificationIcon = ({ app_entry, app_icon, image } : Notification) => {
     return Widget.Icon(icon);
 };
 
-export const NotificationWidget = (n : Notification) => {
+export const NotificationWidget = (n: Notification) => {
     // console.log(n);
     // const icon = Widget.Box({
     //     vpack: 'start',
@@ -94,7 +95,7 @@ export const NotificationWidget = (n : Notification) => {
     });
 };
 
-export const NotificationPopup = async (monitor: number) => {
+export const NotificationPopup = (monitor: number) => {
     // notifications.popupTimeout = 3000;
     // notifications.forceTimeout = false;
     // notifications.cacheActions = false;
@@ -104,13 +105,22 @@ export const NotificationPopup = async (monitor: number) => {
         name: `notifications${monitor}`,
         monitor: monitor,
         anchor: ['bottom', 'left'],
-        child: Widget.Label({
-            // label: "asfd"
-            // label: Notifications.bind("notifications").as(n => {
-            //     print(dump(n.length));
-            //     print(dump(n.filter(n => n.popup)))
-            //     return `there are ${n.length} notifications`;
-            // })
+        child: Widget.Box({
+            css: "background-color: red",
+            children: [
+                // Widget.Label('asdf'),
+                Widget.Label({
+                    // label: "asfd"
+                    // label: Notifications.bind('')
+                    use_markup: false,
+                    // label: Network.wifi.bind('icon_name'),
+                    label: Notifications.bind("popups").as(n => {
+                        print(dump(n.length));
+                        print(dump(n.filter(n => n.popup)))
+                        return `there are ${n.length} notifications`;
+                    })
+                })
+            ]
         })
         // child: Widget.Box({
         //     class_name: 'notifications',

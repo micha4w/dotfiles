@@ -7,7 +7,8 @@ export const Settings = (monitor: number) => Widget.Window({
     name: 'settings',
     // name: `settings${monitor}`,
     anchor: ['left', 'bottom'],
-    keymode: 'on-demand',
+    // keymode: 'on-demand',
+    keymode: 'exclusive',
 
     child: Widget.Box({
         class_names: ['window', 'settings'],
@@ -23,11 +24,15 @@ export const Settings = (monitor: number) => Widget.Window({
                 // label: 'volume',
                 class_name: 'widget',
 
-                children: [
-                    Audio(monitor),
-                    Brightness(monitor),
-                    // children: drop down if monitor connected ddcutil
-                ],
+                children: (() => {
+                    const brightness = Brightness(monitor);
+                    const children : any[] = [
+                        Audio(monitor),
+                        // children: drop down if monitor connected ddcutil
+                    ];
+                    if (brightness) children.push(brightness);
+                    return children;
+                })(),
             }),
             Widget.Label({
                 label: 'battery, logout options',
