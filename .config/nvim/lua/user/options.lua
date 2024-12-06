@@ -1,5 +1,0 @@
-return {
-  opt = {
-    clipboard = 'unnamedplus'
-  }
-}
