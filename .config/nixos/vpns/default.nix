@@ -27,7 +27,7 @@
         bash
         oath-toolkit
         openresolv
-        flakes.nxBender
+        flakes.nxBender.packages.${pkgs.system}.default
       ];
       script = "${./scripts/netextender-wrapper.sh}";
       serviceConfig = {

@@ -1,9 +1,10 @@
 { config, pkgs, pkgsStable, flakes, ... }:
 {
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.latest;
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
       substituters = [
         "https://hyprland.cachix.org"
         "https://anyrun.cachix.org"

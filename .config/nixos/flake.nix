@@ -1,5 +1,4 @@
 {
-
   outputs =
     flakes@{ self
     , nixpkgs
@@ -8,12 +7,11 @@
     }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
     in
     {
       nixosConfigurations = {
         inf-thinkpad = nixpkgs.lib.nixosSystem {
-          system = "${pkgs.system}";
+          system = "${system}";
           specialArgs = {
             inherit flakes;
 
@@ -28,7 +26,7 @@
             flakes.home-manager.nixosModules.home-manager
             {
               imports = [
-                ./hardware-configuration.nix
+                ./hardware-configuration-thinkpad.nix
                 ./vpns
                 ./packages
                 ./micha4w.nix
@@ -45,7 +43,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgsStable.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgsStable.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
@@ -53,11 +51,21 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+#    hyprwayland-scanner = {
+#      # url = "git+https://github.com/hyprwm/Hyprland?rev=9a09eac79b85c846e3a865a9078a3f8ff65a9259&submodules=1";
+#      url = "git+https://github.com/hyprwm/hyprwayland-scanner?ref=refs/tags/v0.4.0";
+#    };
+    aquamarine = {
+      url = "github:hyprwm/aquamarine?ref=v0.4.4";
+    };
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=v0.40.0";
+      # url = "git+https://github.com/hyprwm/Hyprland?rev=9a09eac79b85c846e3a865a9078a3f8ff65a9259&submodules=1";
+      url = "git+https://github.com/hyprwm/Hyprland?ref=refs/tags/v0.45.2&submodules=1";
+      # inputs.hyprwayland-scanner.follows = "hyprwayland-scanner";
+      inputs.aquamarine.follows = "aquamarine";
     };
     split-monitor-workspaces = {
-      url = "github:Duckonaut/split-monitor-workspaces?rev=b40147d96d62a9e9bbc56b18ea421211ee598357";
+      url = "github:Duckonaut/split-monitor-workspaces?rev=131bc5bd02d7f558a66d1a6c4d0013d8545823e0";
       inputs.hyprland.follows = "hyprland";
     };
     #    hyprsplit = {
@@ -65,22 +73,26 @@
     #      inputs.hyprland.follows = "hyprland";
     #    };
     hypr-darkwindow = {
-      url = "github:micha4w/Hypr-DarkWindow?ref=v0.40.0";
+      url = "github:micha4w/Hypr-DarkWindow?ref=v0.45.0";
       inputs.hyprland.follows = "hyprland";
     };
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins?rev=18daf37b7c4e6e51ca2bf8953ce4cff1c38ca725";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins?rev=8571aa9badf7db9c4911018a5611c038cc776256";
+    #   inputs.hyprland.follows = "hyprland";
+    # };
 
     nxBender.url = "github:micha4w/nxBender";
     ags.url = "github:Aylur/ags?ref=v1.8.2";
-    anyrun.url = "github:anyrun-org/anyrun";
-    catppuccin.url = "github:catppuccin/nix";
-    watershot = {
-      url = "github:Kirottu/watershot?ref=v0.2.2";
-      inputs.nixpkgs.follows = "nixpkgs";
+#    anyrun.url = "github:anyrun-org/anyrun";
+#    anyrun-shell-shortcuts.url = "github:micha4w/anyrun-shell-shortcuts";
+    brightnessctl =  {
+      url = "github:Hummer12007/brightnessctl";
+      flake = false;
     };
+    catppuccin.url = "github:catppuccin/nix";
+#    watershot = {
+#      url = "github:Kirottu/watershot?ref=v0.2.2";
+#      inputs.nixpkgs.follows = "nixpkgs";
+#    };
   };
 }
-

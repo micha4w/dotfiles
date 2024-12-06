@@ -1,39 +1,67 @@
-{ config, pkgs, pkgsStable, flakes, ... }:
+{ config, pkgs, pkgsStable, flakes, kernel, ... }@inputs:
 {
   imports = [ ./vscode.nix ];
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "CascadiaCode" "DroidSansMono" ]; })
-    font-awesome
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-  ];
+  fonts = {
+    packages = with pkgs; [
+      (nerdfonts.override { fonts = [ "CascadiaCode" "DroidSansMono" ]; })
+      font-awesome
+      noto-fonts
+      noto-fonts-emoji
+      liberation_ttf
+    ];
+
+    fontconfig = {
+      defaultFonts = {
+        serif = [  "Noto Serif" "Noto Color Emoji" ];
+        sansSerif = [ "Noto Sans" "Noto Color Emoji" ];
+        monospace = [ "Noto Sans Mono" "Noto Color Emoji" ];
+      };
+    };
+  };
 
   programs = {
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        xorg.libX11
+        xorg.libXext
+        xorg.libxcb
+        libdrm
+        chromium
+
+        libusb1 glib.out krb5.lib ncurses5 udev
+      ];
+    };
+    direnv = {
+      enable = true;
+      enableFishIntegration = false;
+      nix-direnv.enable = true;
+    };
     hyprland.enable = true;
     fish.enable = true;
-    bash = {
-      interactiveShellInit = ''
-        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-        then
-          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-        fi
-
-#        if [[ -z ''${WAS_FISH} && -z ''${BASH_EXECUTION_STRING} ]]
-#        then
-#          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-#          exec ${pkgs.tmux}/bin/tmux -c "${pkgs.fish}/bin/fish $LOGIN_OPTION"
-#        fi
-      '';
-    };
+    wireshark.enable = true;
+#     bash = {
+#       interactiveShellInit = ''
+#         if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+#         then
+#           shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+#           exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+#         fi
+#
+# #        if [[ -z ''${WAS_FISH} && -z ''${BASH_EXECUTION_STRING} ]]
+# #        then
+# #          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+# #          exec ${pkgs.tmux}/bin/tmux -c "${pkgs.fish}/bin/fish $LOGIN_OPTION"
+# #        fi
+#       '';
+#     };
     git.enable = true;
     htop.enable = true;
     tmux = {
       enable = true;
-      newSession = true;
+      newSession = false;
+      baseIndex = 1;
     };
     neovim = {
       enable = true;
@@ -52,10 +80,11 @@
     waydroid.enable = true;
     docker = {
       enable = true;
-      rootless = {
-        enable = true;
-        setSocketVariable = true;
-      };
+      enableOnBoot = false;
+#      rootless = {
+#        enable = true;
+#        setSocketVariable = true;
+#      };
     };
     virtualbox.host = {
       enable = true;
@@ -64,7 +93,7 @@
     libvirtd = {
       enable = true;
       qemu = {
-        package = pkgs.qemu_kvm;
+        package = pkgs.qemu_kvm; #.override { smbdSupport = true; };
         ovmf.packages = [ pkgs.OVMFFull.fd ];
         swtpm.enable = true;
       };
@@ -104,12 +133,18 @@
             command = "${pkgs.systemd}/bin/systemctl status anyconnect.service";
             options = [ "NOPASSWD" ];
           }
+          {
+            command = "${pkgs.callPackage ./windows_reboot {}}/bin/windows_reboot";
+            options = [ "NOPASSWD" ];
+          }
         ];
       }];
     };
   };
 
   environment.systemPackages = with pkgs; [
+    any-nix-shell
+
     hyprpaper
     pyprland
     bibata-cursors
@@ -117,10 +152,11 @@
     catppuccin
     catppuccin-gtk
 
-    adwaita-qt6
-    gnome.adwaita-icon-theme
+    albert
 
-    brightnessctl
+    config.boot.kernelPackages.cpupower
+    (pkgs.callPackage ./brightnessctl.nix { inherit flakes; })
+    ddcutil
     playerctl
     pamixer
     home-manager
@@ -128,10 +164,10 @@
 
     # ags
     dunst
-    pkgsStable.albert
     swaylock
     swayidle
     dart-sass
+    bun
     libdbusmenu-gtk3
 
     networkmanagerapplet
@@ -141,7 +177,9 @@
     slurp
     swappy
     wl-clipboard
+    xclip # for wine
     unzip
+    zip
     imagemagick
 
     # Linux
@@ -153,44 +191,67 @@
     ripgrep
     fd
     jq
-    gnome.zenity
+    jc
+    libnotify
+    fzf
+    zenity
+    (wineWowPackages.unstableFull.override { waylandSupport = true; })
+    # (wineWowPackages.unstableFull.overrideAttrs (oldAttrs: {
+    #   buildInputs = oldAttrs.buildInputs ++ [ samba ];
+    # }))
+    wireshark
 
-    wineWowPackages.waylandFull
     quickemu
+    verible
 
     ranger
     bat # for ranger coloring
 
     # cx-master
     clang-tools
-    nodePackages.pyright
+    pyright
 
-    python311
-    python311Packages.numpy
-    python311Packages.scipy
-    python311Packages.pygame
+    python3
+    python3Packages.numpy
+    python3Packages.scipy
+    python3Packages.pygame
 
     # Coding
     gnumake
     cmake
     ninja
-    gccStdenv
+    gcc
     gdb
     meson
     pkg-config
     rustup
+    platformio-core
 
 
     # Apps
     pavucontrol
-    gnome.gnome-system-monitor
+    gnome-system-monitor
     alacritty
-    cinnamon.nemo-with-extensions
-    cinnamon.nemo-fileroller
-    cinnamon.pix
+    nemo-with-extensions
+    # nemo-fileroller
+    pix
     gimp
     prismlauncher
+    android-studio
+    libreoffice-qt-fresh
 
     nixpkgs-fmt
+
+    
+    (pkgs.writeShellApplication {
+      name = "windows_reboot";
+      text = "sudo ${pkgs.callPackage ./windows_reboot {}}/bin/windows_reboot";
+    })
+
+    (pkgs.writeShellApplication {
+      name = "xdg-terminal-exec";
+      runtimeInputs = with pkgs; [ alacritty ];
+      text = "exec alacritty -e \"$@\"";
+    })
   ];
 }

@@ -1,0 +1,61 @@
+{
+  "nodes": {
+    "brightnessctl": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1710089449,
+        "narHash": "sha256-zDohA3F+zX9xbS0SGpF0cygPRPN6iXcH1TrRMhoO1qs=",
+        "owner": "Hummer12007",
+        "repo": "brightnessctl",
+        "rev": "3152968fee82796e5d3bac3b49d81e1dd9787850",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Hummer12007",
+        "repo": "brightnessctl",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1722630782,
+        "narHash": "sha256-hMyG9/WlUi0Ho9VkRrrez7SeNlDzLxalm9FwY7n/Noo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d04953086551086b44b6f3c6b7eeb26294f207da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgsStable": {
+      "locked": {
+        "lastModified": 1722651103,
+        "narHash": "sha256-IRiJA0NVAoyaZeKZluwfb2DoTpBAj+FLI0KfybBeDU0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a633d89c6dc9a2a8aae11813a62d7c58b2c0cc51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "brightnessctl": "brightnessctl",
+        "nixpkgs": "nixpkgs",
+        "nixpkgsStable": "nixpkgsStable"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

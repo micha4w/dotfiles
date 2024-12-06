@@ -3,14 +3,15 @@
     user = "micha4w";
   in
 {
-  catppuccin.flavour = "mocha";
+  catppuccin.flavor = "mocha";
   catppuccin.accent = "maroon";
 
   users = {
     users.${user} = {
       isNormalUser = true;
       initialPassword = "passWORD?";
-      extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "vboxusers" "docker" "libvirtd" ];
+      extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "vboxusers" "docker" "libvirtd" "i2c" "dialout" "wireshark" ];
+      shell = pkgs.fish;
     };
   };
 
@@ -20,22 +21,23 @@
     users.${user} = {
       imports = [
         flakes.ags.homeManagerModules.default
-        flakes.anyrun.homeManagerModules.default
+        # flakes.anyrun.homeManagerModules.default
         flakes.catppuccin.homeManagerModules.catppuccin
       ];
 
       wayland.windowManager.hyprland = {
         enable = true;
-        catppuccin.enable = true;
+        # catppuccin.enable = true;
         package = flakes.hyprland.packages.${pkgs.system}.default;
         settings = {
-          source = [ "~/.config/hypr/hyprland-nix.conf" ];
+          source = [ "~/.config/hypr/hyprland-user.conf" ];
+          env = [ "NIXOS_OZONE_WL,1" ];
         };
         plugins = [
-          flakes.split-monitor-workspaces.packages.${pkgs.system}.default
           # hyprsplit.packages.${pkgs.system}.default
+          flakes.split-monitor-workspaces.packages.${pkgs.system}.default
           flakes.hypr-darkwindow.packages.${pkgs.system}.Hypr-DarkWindow
-          flakes.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+          # flakes.hyprland-plugins.packages.${pkgs.system}.hyprexpo
         ];
       };
 
@@ -49,6 +51,7 @@
           MANPAGER = "nvim +Man!";
           MANWIDTH = 999;
           EDITOR = "nvim";
+          PLATFORMIO_CORE_DIR = "/home/${user}/.local/share/platformio";
         };
         packages = with pkgs; [
           grc
@@ -65,15 +68,26 @@
         catppuccin.enable = true;
         cursorTheme = {
           name = "Bibata-Modern-Classic";
-          size = 18;
+          size = 20;
         };
-        iconTheme.name = "ePapirus-Dark";
+        iconTheme = {
+          package = pkgs.papirus-icon-theme.override {
+            withElementary = true;
+          };
+          name = "ePapirus-Dark";
+        };
       };
 
       qt = {
         enable = true;
-        platformTheme.name = "qtct";
-        style.name = "adwaita-dark";
+        platformTheme.name = "kvantum";
+        style = {
+          name = "kvantum";
+          catppuccin = {
+            enable = true;
+            apply = true;
+          };
+        };
       };
 
       programs = {
@@ -85,52 +99,41 @@
           plugins = [
             { name = "grc"; src = pkgs.fishPlugins.grc.src; }
           ];
-          shellInit = ''
-            export WAS_FISH=1
-          '';
+          # shellInit = ''
+          #   export WAS_FISH=1
+          # '';
           interactiveShellInit = ''
+            # set NIX_BUILD_SHELL '${ (pkgs.callPackage ./packages/fish-nix-shell.nix { }) }/bin/fish-nix-shell'
+
+            ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
             source ~/.config/fish/config-interactive.fish
           '';
         };
-        anyrun = {
-          enable = true;
-          config = {
-            plugins = [
-              # An array of all the plugins you want, which either can be paths to the .so files, or their packages
-              # flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins
-
-              flakes.anyrun.packages.${pkgs.system}.applications
-              # "${flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins}/lib/libapplications.so"
-              "${flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins}/lib/libsymbols.so"
-              "${flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins}/lib/librink.so"
-              "${flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins}/lib/libshell.so"
-              "${flakes.anyrun.packages.${pkgs.system}.anyrun-with-all-plugins}/lib/libdictionary.so"
-
-              # libwebsearch.so
-              # libstdin.so
-            ];
-            x.fraction = 0.5;
-            y.fraction = 0.3;
-            width.absolute = 500;
-            height.absolute = 500;
-            ignoreExclusiveZones = true;
-            #                      hideIcons = false;
-            #                      layer = "overlay";
-            #                      hidePluginInfo = false;
-            #                      closeOnClick = false;
-            #                      showResultsImmediately = false;
-            #                      maxEntries = null;
-          };
-          # extraCss = '' '';
-
-          # extraConfigFiles."some-plugin.ron".text = ''
-          #   Config(
-          #     // for any other plugin
-          #     // this file will be put in ~/.config/anyrun/some-plugin.ron
-          #     // refer to docs of xdg.configFile for available options
-          #   )
-          # '';
-        };
+        # anyrun = {
+        #   enable = true;
+        #   config = {
+        #     plugins = [
+        #       flakes.anyrun.packages.${pkgs.system}.applications
+        #       flakes.anyrun.packages.${pkgs.system}.rink
+        #       flakes.anyrun.packages.${pkgs.system}.shell
+        #       flakes.anyrun.packages.${pkgs.system}.symbols
+        #       flakes.anyrun.packages.${pkgs.system}.dictionary
+        #       flakes.anyrun-shell-shortcuts.packages.${pkgs.system}.default
+        #     ];
+        #     x.fraction = 0.5;
+        #     y.fraction = 0.5;
+        #     width.absolute = 500;
+        #     height.absolute = 500;
+        #     ignoreExclusiveZones = true;
+        #     #                      hideIcons = false;
+        #     #                      layer = "overlay";
+        #     #                      hidePluginInfo = false;
+        #     closeOnClick = true;
+        #     #                      showResultsImmediately = false;
+        #     #                      maxEntries = null;
+        #   };
+        #   extraCss = ''@import url("anyrun.css");'';
+        # };
       };
 
       home.stateVersion = "23.11";

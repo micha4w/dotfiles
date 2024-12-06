@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+tmp=$(mktemp -d)
+echo -ne "auto-windows\0" | iconv -f utf-8 -t utf-16le > $tmp/efivar.txt
+efivar -n 4a67b082-0a4c-41cf-b6c7-440b29bb8c4f-LoaderEntryLastBooted -w -f $tmp/efivar.txt
+
+systemctl reboot --boot-loader-entry=auto-windows
