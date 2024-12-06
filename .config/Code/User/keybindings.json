@@ -106,4 +106,54 @@
         "command": "-workbench.action.terminal.toggleTerminal",
         "when": "terminal.active"
     },
+    {
+        "key": "ctrl+[Backquote]",
+        "command": "editor.action.commentLine",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+7",
+        "command": "-editor.action.commentLine",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+alt+f",
+        "command": "-liveshare.follow",
+        "when": "liveshare:hasCollaborators && !liveshare:isFollowing"
+    },
+    {
+        "key": "ctrl+alt+f",
+        "command": "-liveshare.unfollow",
+        "when": "liveshare:hasCollaborators && liveshare:isFollowing"
+    },
+    {
+        "key": "shift+alt+f",
+        "command": "editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
+    },
+    {
+        "key": "ctrl+shift+i",
+        "command": "-editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
+    },
+    {
+        "key": "shift+alt+f",
+        "command": "editor.action.formatDocument.none",
+        "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+i",
+        "command": "-editor.action.formatDocument.none",
+        "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+x",
+        "command": "-cortex-debug.toggleVariableHexFormat",
+        "when": "debugType == 'cortex-debug'"
+    },
+    {
+        "key": "ctrl+alt+b",
+        "command": "-platformio-ide.build",
+        "when": "pioProjectReady && pioProjectTasksReady"
+    },
 ]

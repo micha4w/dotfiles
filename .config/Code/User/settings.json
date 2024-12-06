@@ -1,6 +1,5 @@
 {
     "vim.vimrc.enable": true,
-    "keyboard.dispatch": "keyCode",
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": false,
     "workbench.colorTheme": "Catppuccin Mocha",
@@ -28,22 +27,42 @@
     "vim.leader": "<space>",
     "vim.normalModeKeyBindings": [
         {
-            "before": ["<leader>", "f"],
-            "commands": ["editor.fold"],
+            "before": [
+                "<leader>",
+                "f"
+            ],
+            "commands": [
+                "editor.fold"
+            ],
         },
         {
-            "before": ["<leader>", "F"],
-            "commands": ["editor.unfold"],
+            "before": [
+                "<leader>",
+                "F"
+            ],
+            "commands": [
+                "editor.unfold"
+            ],
         },
         {
-            "before": ["<leader>", "/"],
-            "commands": ["editor.action.commentLine"],
+            "before": [
+                "<leader>",
+                "/"
+            ],
+            "commands": [
+                "editor.action.commentLine"
+            ],
         },
     ],
     "vim.visualModeKeyBindings": [
         {
-            "before": ["<leader>", "/"],
-            "commands": ["editor.action.commentLine"],
+            "before": [
+                "<leader>",
+                "/"
+            ],
+            "commands": [
+                "editor.action.commentLine"
+            ],
         },
     ],
     "editor.inlayHints.enabled": "offUnlessPressed",
@@ -64,16 +83,12 @@
         "<C-p>": false,
         "<C-d>": true,
         "<C-s>": false,
-        "<C-z>": false
+        "<C-z>": false,
     },
-    "window.zoomLevel": 1,
     "C_Cpp.vcFormat.indent.lambdaBracesWhenParameter": false,
     "vim.highlightedyank.enable": true,
     "vim.highlightedyank.color": "rgba(186, 194, 222, 0.3)",
     "vim.highlightedyank.duration": 175,
-    "window.menuBarVisibility": "hidden",
-    "MATLAB.installPath": "/home/micha4w/.local/share/matlab/R2023b",
-    "MATLAB.telemetry": false,
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "git.suggestSmartCommit": false,
     "cmake.showOptionsMovedNotification": false,
@@ -81,14 +96,92 @@
     "cSpell.language": "en,de",
     "cSpell.useGitignore": false,
     "cSpell.userWords": [
+        "ascii",
         "Ausschliessung",
         "clangd",
+        "fileid",
+        "firefox",
+        "folderid",
+        "Hyprland",
+        "Hyprlang",
+        "jsobject",
+        "jsonify",
+        "keybind",
+        "Keybinds",
+        "lastrowid",
+        "linalg",
+        "LONGLONG",
+        "LONGPTR",
+        "lvalue",
+        "micha",
+        "Modif",
+        "MULT",
+        "multipeek",
+        "pango",
+        "parentid",
+        "PCONFIGHANDLERFUNC",
+        "permissionid",
+        "powerbuilder",
+        "pygame",
+        "socketio",
+        "subfolders",
         "tempdir",
         "tempfile",
         "Timotheus",
-        "tokio"
+        "tokio",
+        "ungroup",
+        "UNSIGNEDINTEGER",
+        "UNSIGNEDLONG",
+        "userid"
     ],
     "[css]": {
         "editor.defaultFormatter": "Wscats.eno"
-    }
+    },
+    "console-ninja.featureSet": "Community",
+    "makefile.configureOnOpen": false,
+    "mesonbuild.downloadLanguageServer": false,
+    "update.mode": "none",
+    "debug.allowBreakpointsEverywhere": true,
+    "extensions.ignoreRecommendations": true,
+    "mesonbuild.languageServer": null,
+    "editor.fontFamily": "'DroidSansM Nerd Font Mono', 'Droid Sans Mono', 'monospace', monospace",
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "workbench.iconTheme": "catppuccin-mocha",
+    "catppuccin-icons.hidesExplorerArrows": true,
+    "maptz.regionfolder": {
+        "[rust]": {
+            "foldStart": "// #region [NAME]",
+            "foldEnd": "// #endregion",
+            "foldStartRegex": "^[\\s]*//[\\s]*#region[\\s]*(.*)$",
+            "defaultFoldStartRegex": "^[\\s]*//[\\s]*#region[\\s]*default[\\s]*(.*)$",
+            "foldEndRegex": "//[\\s]*#endregion",
+        }
+    },
+    "window.menuBarVisibility": "toggle",
+    "STM32VSCodeExtension.cubeCLT.path": "/home/micha4w/.local/share/STM32CubeCLT/",
+    "STM32VSCodeExtension.projectCreator.executablePath": "/home/micha4w/.local/bin/STM32CubeMX",
+    "STM32VSCodeExtension.productFinder.executablePath": "/home/micha4w/.local/bin/STMCUFinder",
+    "powerbuilder-ls.trace.server": "verbose",
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "editor.minimap.enabled": false,
+    "zenMode.hideLineNumbers": false,
+    "lldb.showDisassembly": "never",
+    "pylint.enabled": false,
+    "verilog.languageServer.veribleVerilogLs.enabled": true,
+    "rust-analyzer.lens.enable": false,
+    "jupyter.askForKernelRestart": false,
+    "nixEnvSelector.suggestion": false,
+    "direnv.restart.automatic": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "rust-analyzer.check.ignore": [
+        "dead_code"
+    ],
+    "python.analysis.typeCheckingMode": "standard",
+    "files.exclude": {
+        "**/.git": false
+    },
 }
