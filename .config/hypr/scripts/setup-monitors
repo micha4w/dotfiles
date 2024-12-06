@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+contains() {
+  ! [[ "$1" =~ (^|$'\n')"$2 "(.*?)($'\n'|$) ]]
+}
+
+monitors=$(hyprctl monitors -j | jq -r '.[] | .description')
+
+laptop="BOE 0x07DB" 
+asus_uwd="ASUSTek COMPUTER INC VG34VQEL1A R9LMDW002147" 
+
+if contains monitors asus_uwd
+then
+  hyprctl keyword monitor "desc:$laptop,disable"
+fi

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+shader=$(hyprctl getoption decoration:screen_shader -j | jq -r '.str')
+hyprctl -q keyword decoration:screen_shader '' 
+grim "$@"
+hyprctl -q keyword decoration:screen_shader $shader
