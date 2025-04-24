@@ -1,10 +1,11 @@
-{ config, pkgs, pkgsStable, flakes, kernel, ... }@inputs:
+{ config, pkgs, pkgsStable, flakes, system, ... }@inputs:
 {
   imports = [ ./vscode.nix ];
 
   fonts = {
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "CascadiaCode" "DroidSansMono" ]; })
+      nerd-fonts.caskaydia-mono
+      nerd-fonts.droid-sans-mono
       font-awesome
       noto-fonts
       noto-fonts-emoji
@@ -38,7 +39,15 @@
       enableFishIntegration = false;
       nix-direnv.enable = true;
     };
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
     hyprland.enable = true;
+    hyprlock = {
+      enable = true;
+      # package = flakes.hyprlock.packages.${system}.hyprlock;
+    };
     fish.enable = true;
     wireshark.enable = true;
 #     bash = {
@@ -93,7 +102,8 @@
     libvirtd = {
       enable = true;
       qemu = {
-        package = pkgs.qemu_kvm; #.override { smbdSupport = true; };
+        # package = pkgs.qemu_kvm; #.override { smbdSupport = true; };
+        package = pkgs.qemu_full; #.override { smbdSupport = true; };
         ovmf.packages = [ pkgs.OVMFFull.fd ];
         swtpm.enable = true;
       };
@@ -110,7 +120,6 @@
   security = {
     polkit.enable = true;
     pam.services = {
-      swaylock = { };
       micha4w.enableGnomeKeyring = true;
     };
     sudo = {
@@ -164,7 +173,6 @@
 
     # ags
     dunst
-    swaylock
     swayidle
     dart-sass
     bun
@@ -226,6 +234,9 @@
     pkg-config
     rustup
     platformio-core
+
+    nil
+    nixfmt-rfc-style
 
 
     # Apps

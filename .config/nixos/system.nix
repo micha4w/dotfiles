@@ -1,7 +1,7 @@
 { config, pkgs, pkgsStable, flakes, lib, ... }:
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    # kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelParams = [ "quiet" ];
     kernelModules = [ "ddcci_backlight" ];
     extraModulePackages = [
@@ -26,6 +26,7 @@
           ${pkgs.efivar}/bin/efivar -n 4a67b082-0a4c-41cf-b6c7-440b29bb8c4f-LoaderEntryLastBooted -w -f $tmp/efivar.txt
           ${pkgs.systemd}/bin/bootctl set-default @saved
         '';
+        # ${pkgs.gnused}/bin/sed -i 's/default .*/default @saved/g' /boot/loader/loader.conf
       };
       efi.canTouchEfiVariables = true;
     };
@@ -38,10 +39,7 @@
         };
       };
     };
-    plymouth = {
-      enable = true;
-      catppuccin.enable = true;
-    };
+    plymouth.enable = true;
     tmp.cleanOnBoot = true;
   };
 
@@ -67,6 +65,8 @@
     };
     # for ddcutil
     i2c.enable = true;
+    # for fusion360
+    nvidia.open = true;
   };
 
   time = {
@@ -81,7 +81,6 @@
   console = {
     # font = "Lat2-Terminus16";
     useXkbConfig = true;
-    catppuccin.enable = true;
   };
 
   systemd.services = {
@@ -212,6 +211,7 @@
         variant = "de_nodeadkeys";
 #        options = "caps:escape";
       };
+      videoDrivers = [ "displaylink" "modesetting" ];
     };
 
     pipewire = {

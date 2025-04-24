@@ -60,17 +60,17 @@ function fish_prompt --description 'Write out the prompt'
             for i in (git status --porcelain | string sub -l 2 | sort | uniq)
                 switch $i
                     case "."
-                        set git_status "$git_status"(set_color green)FISH_GIT_X
+                        set git_status "$git_status"(set_color green)$FISH_GIT_X
                     case " D"
-                        set git_status "$git_status"(set_color red)FISH_GIT_PLUS
+                        set git_status "$git_status"(set_color red)$FISH_GIT_PLUS
                     case "*M*"
-                        set git_status "$git_status"(set_color green)FISH_GIT_STAR
+                        set git_status "$git_status"(set_color green)$FISH_GIT_STAR
                     case "*R*"
-                        set git_status "$git_status"(set_color purple)FISH_GIT_RIGHT
+                        set git_status "$git_status"(set_color purple)$FISH_GIT_RIGHT
                     case "*U*"
-                        set git_status "$git_status"(set_color brown)FISH_GIT_EQ
+                        set git_status "$git_status"(set_color brown)$FISH_GIT_EQ
                     case "??"
-                        set git_status "$git_status"(set_color red)FISH_GIT_NEQ
+                        set git_status "$git_status"(set_color red)$FISH_GIT_NEQ
                 end
             end
         else
@@ -81,7 +81,7 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l nix_shell_info (
       if test -n "$IN_NIX_SHELL"
-        echo -n (set_color blue)" "
+        echo -n (set_color blue)" $FISH_STATUS_NIX"
       end
     )
 

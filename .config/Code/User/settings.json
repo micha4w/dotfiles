@@ -53,6 +53,15 @@
                 "editor.action.commentLine"
             ],
         },
+        {
+            "before": [
+                "g",
+                "t"
+            ],
+            "commands": [
+                "editor.action.goToTypeDefinition"
+            ],
+        },
     ],
     "vim.visualModeKeyBindings": [
         {
@@ -62,6 +71,15 @@
             ],
             "commands": [
                 "editor.action.commentLine"
+            ],
+        },
+        {
+            "before": [
+                "<leader>",
+                "d"
+            ],
+            "commands": [
+                "editor.action.addSelectionToNextFindMatch"
             ],
         },
     ],
@@ -171,7 +189,6 @@
     "zenMode.hideLineNumbers": false,
     "lldb.showDisassembly": "never",
     "pylint.enabled": false,
-    "verilog.languageServer.veribleVerilogLs.enabled": true,
     "rust-analyzer.lens.enable": false,
     "jupyter.askForKernelRestart": false,
     "nixEnvSelector.suggestion": false,
@@ -183,5 +200,68 @@
     "python.analysis.typeCheckingMode": "standard",
     "files.exclude": {
         "**/.git": false
+    },
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            120
+        ],
+        "editor.selectionHighlight": false,
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    "dart.closingLabels": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "direnv.watchForChanges": false,
+    "nix.enableLanguageServer": true,
+    "nix.serverSettings": {
+        "nil": {
+        //     "diagnostics": {
+        //         "ignored": [
+        //             "unused_binding",
+        //             "unused_with"
+        //         ],
+        //     },
+            "formatting": {
+                "command": [
+                    "nixfmt"
+                ],
+            },
+        },
+    },
+    "workbench.activityBar.location": "top",
+    "workbench.layoutControl.enabled": false,
+    "window.commandCenter": false,
+    "hjson-formatter.options": {
+        "separator": false,
+        "condense": 4,
+        "bracesSameLine": true,
+        "quotes": "strings",
+        "multiline": "std",
+        "space": 2
+    },
+    "search.useIgnoreFiles": false,
+    "files.associations": {
+        "Makefile": "makefile",
+        "*.tpl": "mako"
+    },
+    "cmake.skipConfigureIfCachePresent": true,
+    "veridian.serverPath": "/home/micha4w/Code/Rust/veridian/target/debug/veridian",
+    "window.customTitleBarVisibility": "never",
+    "window.titleBarStyle": "native",
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
     },
 }

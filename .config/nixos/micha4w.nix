@@ -3,8 +3,13 @@
     user = "micha4w";
   in
 {
-  catppuccin.flavor = "mocha";
-  catppuccin.accent = "maroon";
+  catppuccin = {
+    flavor = "mocha";
+    accent = "maroon";
+
+    plymouth.enable = true;
+    tty.enable = true;
+  };
 
   users = {
     users.${user} = {
@@ -35,7 +40,7 @@
         };
         plugins = [
           # hyprsplit.packages.${pkgs.system}.default
-          flakes.split-monitor-workspaces.packages.${pkgs.system}.default
+          # flakes.split-monitor-workspaces.packages.${pkgs.system}.default
           flakes.hypr-darkwindow.packages.${pkgs.system}.Hypr-DarkWindow
           # flakes.hyprland-plugins.packages.${pkgs.system}.hyprexpo
         ];
@@ -58,6 +63,14 @@
         ];
       };
 
+      catppuccin = {
+        gtk.enable = true;
+        kvantum = {
+          enable = true;
+          apply = true;
+        };
+      };
+
       xdg = {
         enable = true;
         cacheHome = "/home/${user}/.local/cache";
@@ -65,7 +78,6 @@
 
       gtk = {
         enable = true;
-        catppuccin.enable = true;
         cursorTheme = {
           name = "Bibata-Modern-Classic";
           size = 20;
@@ -81,13 +93,7 @@
       qt = {
         enable = true;
         platformTheme.name = "kvantum";
-        style = {
-          name = "kvantum";
-          catppuccin = {
-            enable = true;
-            apply = true;
-          };
-        };
+        style.name = "kvantum";
       };
 
       programs = {
@@ -105,7 +111,8 @@
           interactiveShellInit = ''
             # set NIX_BUILD_SHELL '${ (pkgs.callPackage ./packages/fish-nix-shell.nix { }) }/bin/fish-nix-shell'
 
-            ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
+            ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
+            # --info-right 
             source ~/.config/fish/config-interactive.fish
           '';
         };
