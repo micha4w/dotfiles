@@ -1,1 +1,4 @@
-/nix/store/hxjpidqc7ldk1gf3d50h85qyz1vgdckj-home-manager-files/.config/fish/config.fish
+status is-interactive; and begin
+    # Because NixOS
+    source config-interactive.fish
+end

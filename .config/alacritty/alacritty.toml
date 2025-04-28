@@ -1,0 +1,29 @@
+[terminal]
+shell = "/home/micha4w/.local/scripts/tmux-attach"
+
+[font.normal]
+family = "CaskaydiaMono Nerd Font"
+
+# [[keyboard.bindings]]
+# chars = "\u001BO2P"
+# key = "Space"
+# mods = "Shift"
+
+[[keyboard.bindings]]
+mods = "Control"
+key = "Backspace"
+chars = "\u001b\u007F"
+
+[[keyboard.bindings]]
+mods = "Control|Shift"
+key = "Space"
+action = "ReceiveChar"
+
+[window]
+decorations = "none"
+decorations_theme_variant = "Dark"
+dynamic_padding = true
+opacity = 0.95
+
+[general]
+import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.toml"]
