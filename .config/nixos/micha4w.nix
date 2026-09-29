@@ -15,7 +15,7 @@
     users.${user} = {
       isNormalUser = true;
       initialPassword = "passWORD?";
-      extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "vboxusers" "docker" "libvirtd" "i2c" "dialout" "wireshark" ];
+      extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "vboxusers" "libvirtd" "i2c" "dialout" "wireshark" ];
       shell = pkgs.fish;
     };
   };
@@ -27,17 +27,22 @@
       imports = [
         flakes.ags.homeManagerModules.default
         # flakes.anyrun.homeManagerModules.default
-        flakes.catppuccin.homeManagerModules.catppuccin
+        flakes.catppuccin.homeModules.catppuccin
       ];
 
       wayland.windowManager.hyprland = {
         enable = true;
         # catppuccin.enable = true;
         package = flakes.hyprland.packages.${pkgs.system}.default;
+        # configType = "lua";
+        configType = "hyprlang";
         settings = {
           source = [ "~/.config/hypr/hyprland-user.conf" ];
           env = [ "NIXOS_OZONE_WL,1" ];
         };
+        # extraConfig = ''
+        #   require("hyprland-user.conf")
+        # '';
         plugins = [
           # hyprsplit.packages.${pkgs.system}.default
           # flakes.split-monitor-workspaces.packages.${pkgs.system}.default
@@ -46,10 +51,76 @@
         ];
       };
 
+      services.kanshi = {
+        enable = true;
+        profiles = {
+          undocked = {
+            outputs = [
+              {
+                criteria = "eDP-1";
+                position = "0,0";
+                scale = 1.2;
+              }
+              # { criteria = "*"; }
+            ];
+          };
+          papa = {
+            outputs = [
+              {
+                criteria = "eDP-1";
+                position = "0,0";
+                scale = 1.2;
+              }
+              {
+                criteria = "Dell Inc. DELL P2720D C178643";
+                position = "-2400,-512";
+                scale = 1.066;
+              }
+              {
+                criteria = "Dell Inc. DELL P2720D JV69F99J07US";
+                position = "-4800,-512";
+                scale = 1.066;
+              }
+            ];
+          };
+          gaming = {
+            outputs = [
+              {
+                criteria = "eDP-1";
+                position = "0,0";
+                scale = 1.2;
+              }
+              {
+                criteria = "Samsung Electric Company Odyssey G65B H1AK500000";
+                position = "1600,0";
+              }
+              {
+                criteria = "BNQ BenQ XL2410T 2BB01461SL0";
+                position = "4160,600";
+              }
+            ];
+          };
+          gaming2 = {
+            outputs = [
+              {
+                criteria = "eDP-1";
+                position = "0,0";
+                scale = 1.2;
+              }
+              {
+                criteria = "Samsung Electric Company Odyssey G65B H1AK500000";
+                position = "1600,0";
+              }
+            ];
+          };
+        };
+      };
+
       home = {
         username = "${user}";
         homeDirectory = "/home/${user}";
         sessionVariables = {
+
           LC_ALL = "en_US.UTF-8";
           # PAGER "nvim";
           PAGER = "less";
@@ -57,14 +128,26 @@
           MANWIDTH = 999;
           EDITOR = "nvim";
           PLATFORMIO_CORE_DIR = "/home/${user}/.local/share/platformio";
+          PYTHON_BASIC_REPL = 1;
         };
         packages = with pkgs; [
           grc
         ];
+        pointerCursor = {
+          enable = true;
+          name = "Bibata-Modern-Classic";
+          size = 20;
+          package = pkgs.bibata-cursors;
+
+          gtk.enable = true;
+          dotIcons.enable = true;
+          hyprcursor.enable = true;
+          x11.enable = true;
+        };
       };
 
       catppuccin = {
-        gtk.enable = true;
+        # gtk.enable = true;
         kvantum = {
           enable = true;
           apply = true;
@@ -75,18 +158,28 @@
         enable = true;
         cacheHome = "/home/${user}/.local/cache";
       };
-
-      gtk = {
-        enable = true;
-        cursorTheme = {
-          name = "Bibata-Modern-Classic";
-          size = 20;
+      
+      dconf.settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
         };
+      };
+
+      gtk = let
+        gtkThemeNoBackdrop = {
+          name = "Adwaita-dark";
+          package = import ./packages/remove-gtk-backdrop { inherit pkgs; theme = pkgs.gnome-themes-extra; };
+        };
+      in {
+        enable = true;
+
+        theme = gtkThemeNoBackdrop;
+        gtk4.theme = gtkThemeNoBackdrop;
+        colorScheme = "dark";
+
         iconTheme = {
-          package = pkgs.papirus-icon-theme.override {
-            withElementary = true;
-          };
-          name = "ePapirus-Dark";
+          package = pkgs.papirus-icon-theme;
+          name = "Papirus-Dark";
         };
       };
 
@@ -141,6 +234,23 @@
         #   };
         #   extraCss = ''@import url("anyrun.css");'';
         # };
+      };
+
+      systemd.user.services.onedriver = {
+        Unit = {
+          Description = "OneDriver";
+          After = [ "network-online.target" ];
+          Wants = [ "network-online.target" ];
+        };
+
+        Service = {
+          ExecStart = "${pkgs.onedriver}/bin/onedriver /home/micha4w/OneDrive/";
+          Restart = "on-failure";
+        };
+
+        Install = {
+          # WantedBy = [ "default.target" ];
+        };
       };
 
       home.stateVersion = "23.11";

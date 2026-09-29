@@ -14,20 +14,19 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/dbc69ca5-1981-490f-86df-7b5c19e618be";
-      fsType = "ext4";
+  fileSystems = {
+    "/" = {
+        device = "/dev/disk/by-uuid/dbc69ca5-1981-490f-86df-7b5c19e618be";
+        fsType = "ext4";
+        options = [ "defaults" "x-systemd.device-timeout=0" ];
     };
-
-  fileSystems."/boot" =
-    {
+    "/boot" = {
       device = "/dev/disk/by-uuid/66EF-4CFF";
       fsType = "vfat";
     };
+  };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/b1661823-9da9-4fa8-b63c-8ef9b98ffcba"; }];
+  swapDevices = [{ device = "/dev/disk/by-uuid/b1661823-9da9-4fa8-b63c-8ef9b98ffcba"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -40,5 +39,6 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  # hardware.usb-modeswitch.enable = true;
   powerManagement.cpuFreqGovernor = "schedutil";
 }

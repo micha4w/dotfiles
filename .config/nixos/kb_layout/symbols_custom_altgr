@@ -1,0 +1,35 @@
+default partial alphanumeric_keys
+xkb_symbols "custom_altgr" {
+    include "ch(de_nodeadkeys)"
+    name[Group1]= "German (Switzerland, Custom AltGr)";
+
+    key <AD01> {[ NoSymbol, NoSymbol, less,         NoSymbol ] };
+    key <AD02> {[ NoSymbol, NoSymbol, greater,      NoSymbol ] };
+    key <AD03> {[ NoSymbol, NoSymbol, underscore,   EuroSign ] };
+    key <AD04> {[ NoSymbol, NoSymbol, equal,        radical  ] };
+    key <AD05> {[ NoSymbol, NoSymbol, percent,      NoSymbol ] };
+    key <AD06> {[ NoSymbol, NoSymbol, exclam,       NoSymbol ] };
+    key <AD07> {[ NoSymbol, NoSymbol, braceleft,    NoSymbol ] };
+    key <AD08> {[ NoSymbol, NoSymbol, braceright,   NoSymbol ] };
+    key <AD09> {[ NoSymbol, NoSymbol, numbersign,   NoSymbol ] };
+    key <AD10> {[ NoSymbol, NoSymbol, at,           NoSymbol ] };
+
+    key <AC01> {[ NoSymbol, NoSymbol, plus,         NoSymbol ]};
+    key <AC02> {[ NoSymbol, NoSymbol, asterisk,     NoSymbol ]};
+    key <AC03> {[ NoSymbol, NoSymbol, minus,        NoSymbol ]};
+    key <AC04> {[ NoSymbol, NoSymbol, slash,        NoSymbol ]};
+    key <AC05> {[ NoSymbol, NoSymbol, backslash,    NoSymbol ]};
+    key <AC06> {[ NoSymbol, NoSymbol, question,     NoSymbol ]};
+    key <AC07> {[ NoSymbol, NoSymbol, parenleft,    NoSymbol ]};
+    key <AC08> {[ NoSymbol, NoSymbol, parenright,   NoSymbol ]};
+    key <AC09> {[ NoSymbol, NoSymbol, bracketleft,  NoSymbol ]};
+    key <AC10> {[ NoSymbol, NoSymbol, bracketright, NoSymbol ]};
+
+    key <AB01> {[ NoSymbol, NoSymbol, asciicircum,  NoSymbol ]};
+    key <AB02> {[ NoSymbol, NoSymbol, asciitilde,   NoSymbol ]};
+    key <AB03> {[ NoSymbol, NoSymbol, ampersand,    NoSymbol ]};
+    key <AB04> {[ NoSymbol, NoSymbol, bar,          NoSymbol ]};
+    key <AB07> {[ NoSymbol, NoSymbol, quotedbl,     NoSymbol ]};
+    key <AB08> {[ NoSymbol, NoSymbol, apostrophe,   NoSymbol ]};
+    key <AB09> {[ NoSymbol, NoSymbol, grave,        NoSymbol ]};
+};

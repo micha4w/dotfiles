@@ -1,4 +1,4 @@
-{ config, pkgs, pkgsStable, flakes, system, ... }@inputs:
+{config, pkgs, pkgsStable, flakes, system, ... }@inputs:
 {
   imports = [ ./vscode.nix ];
 
@@ -8,7 +8,7 @@
       nerd-fonts.droid-sans-mono
       font-awesome
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
     ];
 
@@ -25,15 +25,17 @@
     nix-ld = {
       enable = true;
       libraries = with pkgs; [
-        xorg.libX11
-        xorg.libXext
-        xorg.libxcb
+        libX11
+        libXext
+        libxcb
         libdrm
         chromium
 
         libusb1 glib.out krb5.lib ncurses5 udev
       ];
     };
+    # command-not-found.enable = true;
+    nix-index.enable = true;
     direnv = {
       enable = true;
       enableFishIntegration = false;
@@ -65,7 +67,10 @@
 # #        fi
 #       '';
 #     };
-    git.enable = true;
+    git = {
+        enable = true;
+        lfs.enable = true;
+    };
     htop.enable = true;
     tmux = {
       enable = true;
@@ -80,8 +85,57 @@
       withNodeJs = true;
     };
     # wshowkeys.enable = true;
-    file-roller.enable = true;
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+      autoConfig = /* js */ ''
+        // First line must be a comment
+        const attachKeybindings = (win) => {
+          const urlbar = win.document.getElementById("urlbar-input");
+          if (!urlbar) return;
+
+          urlbar.addEventListener("keydown", (e) => {
+            if (e.ctrlKey && e.key.toLowerCase() === "j") {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              urlbar.dispatchEvent(new win.KeyboardEvent("keydown", {
+                key: "ArrowDown",
+                code: "ArrowDown",
+                keyCode: 40,
+                bubbles: true,
+                cancelable: true
+              }));
+            } else if (e.ctrlKey && e.key.toLowerCase() === "k") {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              urlbar.dispatchEvent(new win.KeyboardEvent("keydown", {
+                key: "ArrowUp",
+                code: "ArrowUp",
+                keyCode: 38,
+                bubbles: true,
+                cancelable: true
+              }));
+            }
+          }, true); // Capture phase ensures we intercept before Firefox's default Ctrl+J / Ctrl+K handlers
+        };
+
+        const delayedStartupObserver = (subject, topic) => {
+          if (topic !== "browser-delayed-startup-finished") return;
+
+          try {
+          // Services.obs.removeObserver(delayedStartupObserver, topic);
+            attachKeybindings(subject);
+          } catch (e) {
+            Cu.reportError(e);
+          }
+        };
+
+        try {
+          Services.obs.addObserver(delayedStartupObserver, "browser-delayed-startup-finished");
+        } catch (e) {
+          Cu.reportError(e);
+        }
+      '';
+    };
     seahorse.enable = true;
   };
 
@@ -97,17 +151,20 @@
     };
     virtualbox.host = {
       enable = true;
-      #enableKvm = true;
+      enableKvm = true;
+      addNetworkInterface = false;
+      package = pkgsStable.virtualbox;
     };
-    libvirtd = {
-      enable = true;
-      qemu = {
-        # package = pkgs.qemu_kvm; #.override { smbdSupport = true; };
-        package = pkgs.qemu_full; #.override { smbdSupport = true; };
-        ovmf.packages = [ pkgs.OVMFFull.fd ];
-        swtpm.enable = true;
-      };
-    };
+    # libvirtd = {
+    #   enable = true;
+    #   qemu = {
+    #     # smaller than normal qemu
+    #     package = pkgs.qemu_kvm; #.override { smbdSupport = true; };
+    #     # package = pkgs.qemu; #.override { smbdSupport = true; };
+    #     # ovmf.packages = [ pkgs.OVMFFull.fd ];
+    #     swtpm.enable = true;
+    #   };
+    # };
   };
 
   xdg.portal = {
@@ -150,6 +207,11 @@
       }];
     };
   };
+
+  systemd.user.tmpfiles.rules = [
+    "d %h/.local/share/LTspice 0755 - - -"
+    "L+ %h/.local/share/LTspice/lib - - - - %h/.local/share/ltspice/drive_c/users/%u/AppData/Local/LTspice/lib"
+  ];
 
   environment.systemPackages = with pkgs; [
     any-nix-shell
@@ -203,8 +265,8 @@
     libnotify
     fzf
     zenity
-    (wineWowPackages.unstableFull.override { waylandSupport = true; })
-    # (wineWowPackages.unstableFull.overrideAttrs (oldAttrs: {
+    (wineWow64Packages.stableFull.override { waylandSupport = true; })
+    # (wineWow64Packages.unstableFull.overrideAttrs (oldAttrs: {
     #   buildInputs = oldAttrs.buildInputs ++ [ samba ];
     # }))
     wireshark
@@ -223,23 +285,33 @@
     python3Packages.numpy
     python3Packages.scipy
     python3Packages.pygame
+    mpremote
+    mypy
 
     # Coding
     gnumake
     cmake
     ninja
     gcc
+    mold
     gdb
     meson
     pkg-config
     rustup
+    lldb
     platformio-core
+    go
+    pi-coding-agent
 
     nil
-    nixfmt-rfc-style
-
+    nixd
+    nixfmt
+    tree-sitter
 
     # Apps
+    kicad
+    ltspice
+
     pavucontrol
     gnome-system-monitor
     alacritty
@@ -247,13 +319,19 @@
     # nemo-fileroller
     pix
     gimp
+    pkgsStable.krita
     prismlauncher
-    android-studio
-    libreoffice-qt-fresh
+    # android-studio
+    tigervnc
+    inkscape
+    usbutils
+    xmoto
+    file-roller
+    gparted
 
     nixpkgs-fmt
 
-    
+
     (pkgs.writeShellApplication {
       name = "windows_reboot";
       text = "sudo ${pkgs.callPackage ./windows_reboot {}}/bin/windows_reboot";

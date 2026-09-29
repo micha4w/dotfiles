@@ -34,9 +34,8 @@
                 ./micha4w.nix
                 ./nix.nix
                 ./system.nix
+                ./kb_layout
               ];
-
-              services.throttled.enable = true;
 
               system.stateVersion = "23.11";
             }
@@ -47,7 +46,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgsStable.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgsStable.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
@@ -69,11 +68,12 @@
     # };
     hyprland = {
       # url = "git+https://github.com/hyprwm/Hyprland?rev=9a09eac79b85c846e3a865a9078a3f8ff65a9259&submodules=1";
-      url = "git+https://github.com/hyprwm/Hyprland?ref=refs/tags/v0.48.1&submodules=1";
+      # url = "git+https://github.com/hyprwm/Hyprland?ref=refs/tags/v0.54.3&submodules=1";
+      url = "github:hyprwm/Hyprland/v0.55.4";
       # inputs.hyprwayland-scanner.follows = "hyprwayland-scanner";
       # inputs.aquamarine.follows = "aquamarine";
       # inputs.hyprutils.follows = "hyprutils";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     # split-monitor-workspaces = {
     #   url = "github:Duckonaut/split-monitor-workspaces?rev=1d4742b30aa9f3d01ea227a9c726985ffa832368";
@@ -84,7 +84,7 @@
     #      inputs.hyprland.follows = "hyprland";
     #    };
     hypr-darkwindow = {
-      url = "github:micha4w/Hypr-DarkWindow?ref=v0.48.1";
+      url = "github:micha4w/Hypr-DarkWindow/v0.55.4";
       inputs.hyprland.follows = "hyprland";
     };
     # hyprlock = {

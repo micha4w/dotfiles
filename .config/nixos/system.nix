@@ -2,20 +2,42 @@
 {
   boot = {
     # kernelPackages = pkgs.linuxPackages_xanmod_latest;
-    kernelParams = [ "quiet" ];
+    kernelParams = [
+      "quiet"
+      "rd.luks.options=tries=1"
+      "rd.emergency=poweroff"
+    ];
     kernelModules = [ "ddcci_backlight" ];
     extraModulePackages = [
-      (pkgs.callPackage ./packages/ddcci-driver.nix {
-        inherit flakes;
-        kernel = config.boot.kernelPackages.kernel;
-      })
+      config.boot.kernelPackages.ddcci-driver
+      # config.boot.kernelPackages.evdi
+      # (pkgs.callPackage ./packages/ddcci-driver.nix {
+      #   inherit flakes;
+      #   kernel = config.boot.kernelPackages.kernel;
+      # })
     ];
+
+    initrd = {
+      systemd.enable = true;
+      luks.devices = {
+        root = {
+          device = "/dev/nvme0n1p5";
+          preLVM = true;
+        };
+      };
+      kernelModules = [ "i915" ];
+      # kernelModules = [ "evdi" ];
+    };
+    plymouth.enable = true;
+    tmp.cleanOnBoot = true;
+
+    kernel.sysctl."kernel.yama.ptrace_scope" = /*pkgs.mkOverride 500*/ 1;
 
     loader = {
       timeout = 0;
       systemd-boot = {
         enable = true;
-        consoleMode = "max";
+        # consoleMode = "max";
         configurationLimit = 20;
         extraInstallCommands = ''
           default_cfg=$(${pkgs.coreutils}/bin/cat /boot/loader/loader.conf | ${pkgs.gnugrep}/bin/grep default | ${pkgs.gawk}/bin/awk '{print $2}')
@@ -30,22 +52,12 @@
       };
       efi.canTouchEfiVariables = true;
     };
-    initrd = {
-      systemd.enable = true;
-      luks.devices = {
-        root = {
-          device = "/dev/nvme0n1p6";
-          preLVM = true;
-        };
-      };
-    };
-    plymouth.enable = true;
-    tmp.cleanOnBoot = true;
   };
 
   networking = {
     hostName = "inf-thinkpad";
     networkmanager.enable = true;
+    firewall.allowedTCPPorts = [ 9999 ];
     # wireless.enable = true; # TODO iwd?
   };
 
@@ -67,53 +79,51 @@
     i2c.enable = true;
     # for fusion360
     nvidia.open = true;
+    # for scanners
+    sane.enable = true;
   };
 
   time = {
     timeZone = "Europe/Zurich";
-    hardwareClockInLocalTime = true;
+    hardwareClockInLocalTime = false;
   };
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
     # extraLocaleSettings = { LC_TIME = "ch_DE.UTF-8"; };
   };
+
   console = {
     # font = "Lat2-Terminus16";
-    useXkbConfig = true;
   };
 
-  systemd.services = {
-    waydroid-container.wantedBy = lib.mkForce [ ];
+  systemd = {
+    network.wait-online.enable = false;
+    services = {
+      waydroid-container.wantedBy = lib.mkForce [ ];
 
-    display-manager.after = [ "multi-user.target" ];
-    "ddcci_backlight@" = {
-      scriptArgs = "%i";
-      script = ''
-        echo "Trying to attach ddcci to $1"
-        id=$(echo "$1" | cut -d "-" -f 2)
-        if ${pkgs.ddcutil}/bin/ddcutil getvcp 10 -b $id; then
-          echo ddcci 0x37 > "/sys/bus/i2c/devices/$1/new_device"
-        fi
-      '';
-      serviceConfig.Type = "oneshot";
+      display-manager.after = [ "multi-user.target" ];
+      "ddcci_backlight@" = {
+        scriptArgs = "%i";
+        script = ''
+          echo "Trying to attach ddcci to $1"
+          id=$(echo "$1" | cut -d "-" -f 2)
+          if ${pkgs.ddcutil}/bin/ddcutil getvcp 10 -b $id; then
+            echo ddcci 0x37 > "/sys/bus/i2c/devices/$1/new_device"
+          fi
+        '';
+        serviceConfig.Type = "oneshot";
+      };
     };
   };
   services = {
+    fprintd.enable = true;
     udev = {
-      # packages = with pkgs; [
-      #   platformio-core.udev
-      #   openocd
-      # ];
-      extraHwdb = ''
-        evdev:atkbd:*
-          KEYBOARD_KEY_01=capslock
-          KEYBOARD_KEY_3a=esc
-
-        *
-          KEYBOARD_KEY_70029=capslock
-          KEYBOARD_KEY_70039=esc
-      '';
+      packages = with pkgs; [
+        platformio-core.udev
+        qmk-udev-rules
+        # openocd
+      ];
       extraRules = ''
         SUBSYSTEM=="i2c-dev", ACTION=="add",\
           ATTR{name}=="AMDGPU DM i2c *",\
@@ -185,10 +195,10 @@
       #   SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE="0664", GROUP="plugdev"
       '';
     };
-    logind = {
-      powerKey = "ignore";
-      lidSwitch = "suspend-then-hibernate";
-      lidSwitchExternalPower = "ignore";
+    logind.settings.Login = {
+      HandleLowerKey = "ignore";
+      HandleLidSwitch = "suspend-then-hibernate";
+      HandleLidSwitchExternalPower = "ignore";
     };
     pppd.enable = true;
     displayManager = {
@@ -206,12 +216,10 @@
     libinput.enable = true;
     xserver = {
       enable = true;
-      xkb = {
-        layout = "ch";
-        variant = "de_nodeadkeys";
-#        options = "caps:escape";
-      };
-      videoDrivers = [ "displaylink" "modesetting" ];
+      videoDrivers = [
+        # "displaylink"
+        "modesetting"
+      ];
     };
 
     pipewire = {
@@ -256,5 +264,7 @@
         CPU_MAX_PERF_ON_BAT = 60;
       };
     };
+    throttled.enable = true;
+    flatpak.enable = true;
   };
 }
