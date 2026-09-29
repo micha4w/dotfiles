@@ -1,6 +1,25 @@
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ls='ls -Ah --color'
 
+
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gp='git push'
+alias gpu='git push --set-upstream'
+alias gr='git rebase --autostash'
+alias gri='git rebase -i --autostash'
+alias grh='git reset --hard'
+alias grs='git reset --soft'
+alias gpf='git push --force-with-lease'
+alias gpl='git pull'
+alias gpt='git push --tags'
+alias gt='git tag'
+alias gca='git commit --amend --no-edit'
+function gc
+   git commit -m (string join ' ' -- $argv)
+end
+
 function bind_bang
     switch (commandline --current-token)[-1]
     case "!"
