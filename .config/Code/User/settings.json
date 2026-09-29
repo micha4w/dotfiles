@@ -28,30 +28,33 @@
     "vim.normalModeKeyBindings": [
         {
             "before": [
-                "<leader>",
+                " ",
                 "f"
             ],
             "commands": [
-                "editor.fold"
+                "editor.action.formatDocument"
             ],
+            "recursive": true
         },
+        // {
+        //     "before": [
+        //         " ",
+        //         "F"
+        //     ],
+        //     "commands": [
+        //         "editor.unfold"
+        //     ],
+        //     "recursive": true
+        // },
         {
             "before": [
-                "<leader>",
-                "F"
-            ],
-            "commands": [
-                "editor.unfold"
-            ],
-        },
-        {
-            "before": [
-                "<leader>",
+                " ",
                 "/"
             ],
             "commands": [
                 "editor.action.commentLine"
             ],
+            "recursive": true
         },
         {
             "before": [
@@ -61,7 +64,69 @@
             "commands": [
                 "editor.action.goToTypeDefinition"
             ],
+            "recursive": true
         },
+        {
+            "before": [
+                "ö"
+            ],
+            "source": "vimrc",
+            "after": [
+                ":"
+            ],
+            "recursive": true
+        },
+        {
+            "before": [
+                "-"
+            ],
+            "commands": [
+                {
+                    "command": "oil-code.open"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<cr>"
+            ],
+            "commands": [
+                {
+                    "command": "oil-code.select"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<c-l>"
+            ],
+            "commands": [
+                {
+                    "command": "oil-code.refresh"
+                }
+            ]
+        },
+        {
+            "before": [
+                "`"
+            ],
+            "commands": [
+                {
+                    "command": "oil-code.cd"
+                }
+            ]
+        },
+        // {
+        //     "before": [
+        //         "g",
+        //         "d"
+        //     ],
+        //     "commands": [
+        //         {
+        //             "command": "oil-code.toggleDetails"
+        //         }
+        //     ]
+        // }
     ],
     "vim.visualModeKeyBindings": [
         {
@@ -81,7 +146,7 @@
             "commands": [
                 "editor.action.addSelectionToNextFindMatch"
             ],
-        },
+        }
     ],
     "editor.inlayHints.enabled": "offUnlessPressed",
     "autopep8.args": [
@@ -228,12 +293,12 @@
     "nix.enableLanguageServer": true,
     "nix.serverSettings": {
         "nil": {
-        //     "diagnostics": {
-        //         "ignored": [
-        //             "unused_binding",
-        //             "unused_with"
-        //         ],
-        //     },
+            //     "diagnostics": {
+            //         "ignored": [
+            //             "unused_binding",
+            //             "unused_with"
+            //         ],
+            //     },
             "formatting": {
                 "command": [
                     "nixfmt"
@@ -263,5 +328,34 @@
     "window.titleBarStyle": "native",
     "extensions.experimental.affinity": {
         "asvetliakov.vscode-neovim": 1
+    },
+    "terminal.integrated.scrollback": 50000,
+    "diffEditor.renderSideBySide": true,
+    "chat.agent.enabled": false,
+    "chat.commandCenter.enabled": false,
+    "explorer.confirmPasteNative": false,
+    "terminal.integrated.stickyScroll.enabled": false,
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "C_Cpp.vcFormat.newLine.beforeElse": false,
+    "rust-analyzer.imports.prefix": "plain",
+    "C_Cpp.default.compilerPath": "/nix/store/qd70v8g0561vm8m33kmnp79z00cgyi5n-gcc-wrapper-15.2.0/bin/g++",
+    "window.confirmSaveUntitledWorkspace": false,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "rust-analyzer.server.path": "rust-analyzer",
+    "github.copilot.renameSuggestions.triggerAutomatically": false,
+    "powerbuilder.languageServer.logLevel": "info",
+    "files.autoSave": "afterDelay",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "powerbuilder.languageServer.path": "/home/micha4w/Code/Rust/powerbuilder-ls/wrap-executable",
+    "github.copilot.editor.enableCodeActions": false,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "ocaml": false,
+        "ocaml.ocamllex": false,
+        "ocaml.menhir": false
     },
 }
